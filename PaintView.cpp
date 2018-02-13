@@ -197,7 +197,9 @@ int PaintView::handle(int event)
 
 	}
 
+	Point target(coord.x, m_nWindowHeight - coord.y);
 
+	this->m_pDoc->m_pUI->m_origView->setSource(target);
 
 	return 1;
 }

@@ -30,11 +30,15 @@ public:
 
 	void resizeWindow(int width, int height);
 
+	void setSource(Point p);
+
 	ImpressionistDoc*	m_pDoc;
 
 private:
 	int	m_nWindowWidth, 
 		m_nWindowHeight;
+
+
 
 };
 
