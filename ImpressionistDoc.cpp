@@ -19,6 +19,7 @@
 #include "ScatteredPointsBrush.h"
 #include "ScatterLinesBrush.h"
 #include "ScatteredCirclesBrush.h"
+#include "Highlighter.h"
 #include <math.h>
 
 
@@ -51,6 +52,8 @@ ImpressionistDoc::ImpressionistDoc()
 		= new ScatterLinesBrush( this, "Scattered Lines" );
 	ImpBrush::c_pBrushes[BRUSH_SCATTERED_CIRCLES]	
 		= new ScatteredCirclesBrush( this, "Scattered Circles" );
+	ImpBrush::c_pBrushes[BRUSH_HIGHLIGHTER]
+		= new Highlighter(this, "Highlighter");
 
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
