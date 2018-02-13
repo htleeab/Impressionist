@@ -7,10 +7,13 @@
 #include "impressionist.h"
 #include "impressionistDoc.h"
 #include "originalview.h"
+#include <math.h>
 
 #ifndef WIN32
 #define min(a, b)	( ( (a)<(b) ) ? (a) : (b) )
 #endif
+
+static Point source;
 
 OriginalView::OriginalView(int			x, 
 						   int			y, 
@@ -76,6 +79,21 @@ void OriginalView::draw()
 		glDrawPixels( drawWidth, drawHeight, GL_RGB, GL_UNSIGNED_BYTE, bitstart );
 
 	}
+
+	// marker appears on the original image showing where you're painting.
+	if (m_pDoc->m_ucBitmap) {
+		glBegin(GL_POLYGON);
+		double Pi = 3.14159;
+		for (int i = 0; i != 10; i++) {
+			glVertex2d(source.x + 2 * cos(2*i*Pi/9), source.y + 2 * sin(2 * i * Pi / 9));
+		}
+
+		glColor3f(1, 0, 0);
+		glEnd();
+
+	}
+
+
 			
 	glFlush();
 }
@@ -91,3 +109,9 @@ void OriginalView::resizeWindow(int	width,
 	resize(x(), y(), width, height);
 }
 
+
+void OriginalView::setSource(Point p) {
+	source = p;
+	printf("%d,%d,,,",source.x, source.y);
+	redraw();
+}
