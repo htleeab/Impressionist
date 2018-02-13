@@ -112,6 +112,5 @@ void OriginalView::resizeWindow(int	width,
 
 void OriginalView::setSource(Point p) {
 	source = p;
-	printf("%d,%d,,,",source.x, source.y);
 	redraw();
 }
