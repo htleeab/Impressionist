@@ -59,6 +59,8 @@ ImpressionistDoc::ImpressionistDoc()
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
 
 	m_pCurrentBrushDirection = 0;
+
+	colorPicked = false;
 }
 
 
@@ -161,7 +163,6 @@ void ImpressionistDoc::setGradientDirection(const Point source) {
 			GLubyte color[3] = {0,0,0};
 			memcpy(color, GetOriginalPixel(source.x + i-1, source.y+j-1),3);
 			grayscale[i][j] = (static_cast<GLfloat>(color[0])/255 + static_cast<GLfloat>(color[1])/255 + static_cast<GLfloat>(color[2])/255) / 3;
-			//printf("grayscale: %f, color: (%f,%f,%f)\n", grayscale[i][j], static_cast<GLfloat>(color[0]), static_cast<GLfloat>(color[1]), static_cast<GLfloat>(color[2]));
 		}
 	}
 

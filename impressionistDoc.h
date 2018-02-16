@@ -61,6 +61,9 @@ public:
 	float			movementAngle;
 	float			gradientAngle;
 
+	bool			colorPicked;
+	GLubyte			Pickedcolor[3];
+
 	ImpressionistUI*	m_pUI;
 
 // Operations

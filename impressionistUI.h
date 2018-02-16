@@ -10,6 +10,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/fl_file_chooser.H>		// FLTK file chooser
+#include <FL/Fl_Color_Chooser.H>		// FLTK file chooser
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Value_Slider.H>
 #include <FL/Fl_Choice.H>
@@ -86,6 +87,7 @@ private:
 	static void	cb_save_image(Fl_Menu_* o, void* v);
 	static void	cb_swap_image(Fl_Menu_* o, void* v);
 	static void	cb_brushes(Fl_Menu_* o, void* v);
+	static void	cb_pick_color(Fl_Menu_* o, void* v);
 	static void	cb_clear_canvas(Fl_Menu_* o, void* v);
 	static void	cb_exit(Fl_Menu_* o, void* v);
 	static void	cb_about(Fl_Menu_* o, void* v);
