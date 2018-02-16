@@ -243,6 +243,17 @@ int ImpressionistDoc::saveImage(char *iname)
 	return 1;
 }
 
+int ImpressionistDoc::swapImage() {
+	unsigned char*	tmpSwapData;
+	tmpSwapData = m_ucPainting;
+	m_ucPainting = m_ucBitmap;
+	m_ucBitmap = tmpSwapData;
+
+	m_pUI->m_origView->refresh();
+	m_pUI->m_paintView->refresh();
+	return 1;
+}
+
 //----------------------------------------------------------------
 // Clear the drawing canvas
 // This is called by the UI when the clear canvas menu item is 
