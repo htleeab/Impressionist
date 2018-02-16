@@ -87,7 +87,7 @@ void OriginalView::draw()
 		for (int i = 0; i != 10; i++) {
 			glVertex2d(source.x + 2 * cos(2*i*Pi/9), source.y + 2 * sin(2 * i * Pi / 9));
 		}
-
+		//printf("%d,%d,,", source.x, source.y);
 		glColor3f(1, 0, 0);
 		glEnd();
 
