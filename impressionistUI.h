@@ -98,6 +98,7 @@ private:
 	static void	cb_widthSlides(Fl_Widget* o, void* v);
 	static void	cb_angleSlides(Fl_Widget* o, void* v);
 	static void	cb_alphaSlides(Fl_Widget* o, void* v);
+	static void cb_auto_paint_button(Fl_Widget* o, void* v);
 
 };
 

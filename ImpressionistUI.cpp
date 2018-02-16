@@ -217,6 +217,13 @@ void ImpressionistUI::cb_pick_color(Fl_Menu_* o, void* v)
 		pDoc->colorPicked = true;
 	}
 }
+
+void ImpressionistUI::cb_auto_paint_button(Fl_Widget* o, void* v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+
+	pDoc->autoPaint();
+}
 //-------------------------------------------------------------
 // Brings up the paint dialog
 // This is called by the UI when the brushes menu item
@@ -580,6 +587,11 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushAlphaSlides->value(m_alpha);
 		m_BrushAlphaSlides->align(FL_ALIGN_RIGHT);
 		m_BrushAlphaSlides->callback(cb_alphaSlides);
+
+
+		m_ClearCanvasButton = new Fl_Button(10, 200, 150, 25, "&Auto Paint");
+		m_ClearCanvasButton->user_data((void*)(this));
+		m_ClearCanvasButton->callback(cb_auto_paint_button);
 
     m_brushDialog->end();	
 
