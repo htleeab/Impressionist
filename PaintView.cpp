@@ -112,11 +112,13 @@ void PaintView::draw()
 		{
 		case LEFT_MOUSE_DOWN:
 			m_pDoc->updateBrushDirection(source, target, true);
-			m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
+			if (isInRange(target))// 1.2 cut out of range
+				m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
 			break;
 		case LEFT_MOUSE_DRAG:
 			m_pDoc->updateBrushDirection(source, target);
-			m_pDoc->m_pCurrentBrush->BrushMove( source, target );
+			if (isInRange(target))// 1.2 cut out of range
+				m_pDoc->m_pCurrentBrush->BrushMove( source, target );
 			break;
 		case LEFT_MOUSE_UP:
 			m_pDoc->updateBrushDirection(source, target);
@@ -281,4 +283,10 @@ void PaintView::RightMouseEnd(const Point point2)
 	m_pDoc->m_pUI->rightMouseSet(angle, size);
 	RestoreContent();
 	//refresh();
+}
+
+bool PaintView::isInRange(const Point target) {
+	if (target.x > m_nDrawWidth || (m_nWindowHeight -target.y)>m_nDrawHeight)
+		return false;
+	return true;
 }

@@ -256,7 +256,7 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 
 	pDoc->setBrushType(type);
 
-	if (type == 1 || type == 4 || type ==6){
+	if (type == 1 || type == 4){
 		pUI->m_BrushDirectionChoice->activate();
 		pUI->m_BrushLineWidthSlider->activate();
 		pUI->m_BrushLineAngleSlider->activate();
