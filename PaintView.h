@@ -46,6 +46,7 @@ private:
 	void RightMouseBegin(const Point target);
 	void RightMouseMove(const Point target);
 	void RightMouseEnd(const Point target);
+	bool isInRange(const Point target);
 };
 
 #endif
