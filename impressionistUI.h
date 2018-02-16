@@ -104,6 +104,7 @@ private:
 	static void cb_blur_filter_button(Fl_Widget* o, void* v);
 	static void cb_sharpen_filter_button(Fl_Widget* o, void* v);
 	static void cb_customize_filter_button(Fl_Widget* o, void* v);
+	static void cb_auto_paint_button(Fl_Widget* o, void* v);
 
 };
 

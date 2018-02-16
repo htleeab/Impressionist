@@ -74,7 +74,7 @@ void FilterBrush::SetColor(const Point source)
 	GLubyte sourceColor[3];
 	int row = pDoc->filterKernelRow;
 	int col = pDoc->filterKernelRow;
-	Point p_source;
+	Point p_source;	
 	for (int i = 0; i < row; i++) {
 		for (int j = 0; j < col; j++) {
 			p_source.x = source.x + i - row / 2;
@@ -85,10 +85,10 @@ void FilterBrush::SetColor(const Point source)
 			}
 		}
 	}
-
 	GLbyte color[3];
 	for (int c = 0; c < 3; c++) {
-		color[c] = (byte)static_cast<unsigned int>(colorFloat[c] * 255);
+		colorFloat[c] = max(colorFloat[c], 0.0);
+		colorFloat[c] = min(colorFloat[c], 1.0);
 		color[c] = (byte)static_cast<unsigned int>(colorFloat[c] * 255);
 	}
 	
