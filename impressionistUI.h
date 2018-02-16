@@ -45,6 +45,10 @@ public:
 	Fl_Slider*			m_BrushLineAngleSlider;
 	Fl_Choice*			m_BrushDirectionChoice;
 	Fl_Slider*			m_BrushAlphaSlides;
+	//filter
+	Fl_Button*          m_FilterBlurButton;
+	Fl_Button*          m_FilterSharpenButton;
+	Fl_Button*          m_FilterCustomizeButton;
 
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
@@ -57,7 +61,6 @@ public:
 
 	int					getSize();
 	void				setSize(int size);
-
 	int					getWidth();
 	void				setWidth(int width);
 	int					getAngle();
@@ -98,6 +101,9 @@ private:
 	static void	cb_widthSlides(Fl_Widget* o, void* v);
 	static void	cb_angleSlides(Fl_Widget* o, void* v);
 	static void	cb_alphaSlides(Fl_Widget* o, void* v);
+	static void cb_blur_filter_button(Fl_Widget* o, void* v);
+	static void cb_sharpen_filter_button(Fl_Widget* o, void* v);
+	static void cb_customize_filter_button(Fl_Widget* o, void* v);
 
 };
 

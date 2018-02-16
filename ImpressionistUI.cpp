@@ -249,7 +249,32 @@ void ImpressionistUI::cb_exit(Fl_Menu_* o, void* v)
 
 }
 
+void ImpressionistUI::cb_blur_filter_button(Fl_Widget* o, void* v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	pDoc ->blurringKernel();
+}
 
+void ImpressionistUI::cb_sharpen_filter_button(Fl_Widget* o, void* v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	if (pDoc->filterKernel) pDoc->deleteFilterKernel();
+	int size = pDoc->getSize();//Brush size
+	pDoc->filterKernel = new float*[size];
+	for (int i = 0; i < size; i++) {
+		pDoc->filterKernel[i] = new float[size];
+		//TODO: set the value of kernel
+		for (int j = 0; j < size; j++)
+			pDoc->filterKernel[i][j] = 1;
+	}
+}
+
+void ImpressionistUI::cb_customize_filter_button(Fl_Widget* o, void* v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	//TODO: set filter
+	pDoc->clearCanvas();
+}
 
 //-----------------------------------------------------------
 // Brings up an about dialog box
@@ -283,6 +308,16 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 		pUI->m_BrushDirectionChoice->deactivate();
 		pUI->m_BrushLineWidthSlider->deactivate();
 		pUI->m_BrushLineAngleSlider->deactivate(); 
+	}
+	if (type == 7) {
+		pUI->m_FilterBlurButton->activate();
+		pUI->m_FilterSharpenButton->activate();
+		pUI->m_FilterCustomizeButton->activate();
+	}
+	else {
+		pUI->m_FilterBlurButton->deactivate();
+		pUI->m_FilterSharpenButton->deactivate();
+		pUI->m_FilterCustomizeButton->deactivate();
 	}
 
 }
@@ -462,6 +497,7 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
   {"Scattered Lines",	FL_ALT+'m', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SCATTERED_LINES},
   {"Scattered Circles",	FL_ALT+'d', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SCATTERED_CIRCLES},
   {"Highlighter",	FL_ALT + 'h', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_HIGHLIGHTER },
+  { "Filter",	FL_ALT + 'h', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_FILTER },
   {0}
 };
 
@@ -517,8 +553,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushTypeChoice->menu(brushTypeMenu);
 		m_BrushTypeChoice->callback(cb_brushChoice);
 
-		//Vivian add
-		m_BrushDirectionChoice = new Fl_Choice(100, 40, 150, 25, "&Stroke Direction");
+		m_BrushDirectionChoice = new Fl_Choice(110, 40, 150, 25, "&Stroke Direction");
 		m_BrushDirectionChoice->user_data((void*)(this));	// record self to be used by static callback functions
 		m_BrushDirectionChoice->menu(brushDirectionMenu);
 		m_BrushDirectionChoice->callback(cb_brushDirectionChoice);
@@ -527,7 +562,6 @@ ImpressionistUI::ImpressionistUI() {
 		m_ClearCanvasButton = new Fl_Button(240,10,150,25,"&Clear Canvas");
 		m_ClearCanvasButton->user_data((void*)(this));
 		m_ClearCanvasButton->callback(cb_clear_canvas_button);
-
 
 		// Add brush size slider to the dialog 
 		m_BrushSizeSlider = new Fl_Value_Slider(10, 80, 300, 20, "Size");
@@ -542,7 +576,6 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushSizeSlider->align(FL_ALIGN_RIGHT);
 		m_BrushSizeSlider->callback(cb_sizeSlides);
 
-		// Vivian: brush  line thickness and brush angle slider
 		m_BrushLineWidthSlider = new Fl_Value_Slider(10, 110, 300, 20, "Line Width");
 		m_BrushLineWidthSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_BrushLineWidthSlider->type(FL_HOR_NICE_SLIDER);
@@ -580,6 +613,21 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushAlphaSlides->value(m_alpha);
 		m_BrushAlphaSlides->align(FL_ALIGN_RIGHT);
 		m_BrushAlphaSlides->callback(cb_alphaSlides);
+
+		m_FilterBlurButton = new Fl_Button(20, 190, 85, 25, "&Blurring");
+		m_FilterBlurButton->user_data((void*)(this));
+		m_FilterBlurButton->callback(cb_blur_filter_button);
+		m_FilterBlurButton->deactivate();
+
+		m_FilterSharpenButton = new Fl_Button(130, 190, 85, 25, "&Sharpening");
+		m_FilterSharpenButton->user_data((void*)(this));
+		m_FilterSharpenButton->callback(cb_sharpen_filter_button);
+		m_FilterSharpenButton->deactivate();
+
+		m_FilterCustomizeButton = new Fl_Button(260, 190, 100, 25, "&Customize(TODO)");
+		m_FilterCustomizeButton->user_data((void*)(this));
+		m_FilterCustomizeButton->callback(cb_customize_filter_button);
+		m_FilterCustomizeButton->deactivate();
 
     m_brushDialog->end();	
 

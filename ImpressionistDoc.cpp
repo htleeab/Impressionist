@@ -20,6 +20,7 @@
 #include "ScatterLinesBrush.h"
 #include "ScatteredCirclesBrush.h"
 #include "Highlighter.h"
+#include "FilterBrush.h"
 #include <math.h>
 
 
@@ -33,7 +34,7 @@ ImpressionistDoc::ImpressionistDoc()
 	m_nWidth		= -1;
 	m_ucBitmap		= NULL;
 	m_ucPainting	= NULL;
-
+	filterKernel	= NULL;
 
 	// create one instance of each brush
 	ImpBrush::c_nBrushCount	= NUM_BRUSH_TYPE;
@@ -54,6 +55,8 @@ ImpressionistDoc::ImpressionistDoc()
 		= new ScatteredCirclesBrush( this, "Scattered Circles" );
 	ImpBrush::c_pBrushes[BRUSH_HIGHLIGHTER]
 		= new Highlighter(this, "Highlighter");
+	ImpBrush::c_pBrushes[BRUSH_FILTER]
+		= new FilterBrush(this, "Filter");
 
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
@@ -149,7 +152,6 @@ void ImpressionistDoc::setMovementDirection(const Point target, bool start) {
 	else {
 		movementAngle = atan2((previousPoint.y - target.y), (previousPoint.x - target.x)) * 180 / pi;
 	}
-	//printf("movementAngle:%f, previous point: (%f,%f), current point: (%f,%f)\n", movementAngle, previousPoint.x, previousPoint.y, target.x, target.y);
 	previousPoint = target;
 }
 
@@ -176,7 +178,45 @@ void ImpressionistDoc::setGradientDirection(const Point source) {
 		}
 	}
 	gradientAngle = atan2(sobelYValue, sobelXValue) * 180 / pi;
-	//printf("gradientAngle: %f, sobelValue: (%f,%f)\n", gradientAngle, sobelXValue, sobelYValue);
+}
+
+void ImpressionistDoc::deleteFilterKernel() {
+	if (filterKernel) {
+		for (int i = 0; i < filterKernelRow; i++) {
+			delete[] filterKernel[i];
+		}
+		delete[] filterKernel;
+		filterKernel = NULL;
+	}
+}
+
+void ImpressionistDoc::normalizeKernel() {
+	if (!filterKernel)return;
+
+	float sum=0;
+	for (int i = 0; i < filterKernelRow; i++) {
+		for (int j = 0; j < filterKernelCol; j++)
+			sum += filterKernel[i][j];
+	}
+	for (int i = 0; i < filterKernelRow; i++) {
+		for (int j = 0; j < filterKernelCol; j++)
+			filterKernel[i][j]= filterKernel[i][j]/sum;
+	}
+}
+
+void ImpressionistDoc::blurringKernel() {
+
+	if (filterKernel) deleteFilterKernel();
+	int size = getSize();//Brush size
+	filterKernelRow = size;
+	filterKernelCol = size;
+	filterKernel = new float*[size];
+	for (int i = 0; i < size; i++) {
+		filterKernel[i] = new float[size];
+		for (int j = 0; j < size; j++) {
+			filterKernel[i][j] = (float)1 / (size*size);
+		}
+	}
 }
 
 //---------------------------------------------------------
