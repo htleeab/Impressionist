@@ -37,6 +37,11 @@ public:
 	void	setGradientDirection(const Point source);
 
 	char*	getImageName();					// get the current image name
+
+	void	deleteFilterKernel();
+	void	normalizeKernel();
+	void	blurringKernel();
+
 	
 
 // Attributes
@@ -63,6 +68,9 @@ public:
 
 	bool			colorPicked;
 	GLubyte			Pickedcolor[3];
+	float**			filterKernel;
+	int				filterKernelRow;
+	int				filterKernelCol;
 
 	ImpressionistUI*	m_pUI;
 
