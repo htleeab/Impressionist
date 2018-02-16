@@ -18,6 +18,7 @@
 #define RIGHT_MOUSE_DOWN	4
 #define RIGHT_MOUSE_DRAG	5
 #define RIGHT_MOUSE_UP		6
+#define AUTO_PAINT			7
 
 
 #ifndef WIN32
@@ -136,6 +137,10 @@ void PaintView::draw()
 			RightMouseEnd(target);
 			break;
 
+		case AUTO_PAINT:
+			autoPaintDetails();
+			break;
+
 		default:
 			printf("Unknown event!!\n");		
 			break;
@@ -251,6 +256,57 @@ void PaintView::RestoreContent()
 				  m_pPaintBitstart);
 
 //	glDrawBuffer(GL_FRONT);
+}
+
+void PaintView::autoPaintDetails()
+{
+
+	
+
+	Point source(0, 0);
+	Point target(0, 0);
+
+
+	int size = m_pDoc->getSize();
+
+	while(target.x<m_nDrawWidth) {
+		source.x += size / 2 + 3;
+		target.x += size / 2 + 3;
+		while (target.y<m_nDrawHeight) {
+			source.y += size / 2 + 3;
+			target.y += size / 2 + 3;
+
+			int number_of_draws = 5;
+
+			m_pDoc->updateBrushDirection(source, target, true);
+			m_pDoc->m_pCurrentBrush->BrushBegin(source, target);
+			for (int i = 0; i < number_of_draws; i++) {
+				Point p_source;
+				p_source.x = target.x + rand() % size - size / 2;
+				p_source.y = target.y + rand() % size - size / 2;
+
+				Point p_target = p_source;
+
+				m_pDoc->m_pCurrentBrush->BrushMove(p_source, p_target);
+			}
+			m_pDoc->m_pCurrentBrush->BrushEnd(source, target);
+		}
+		target.y = 0;
+	}
+
+	SaveCurrentContent();
+	RestoreContent();
+	//glFlush();
+
+	//draw();
+}
+
+void PaintView::autoPaint()
+{
+	isAnEvent = 1;
+	eventToDo = AUTO_PAINT;
+	refresh();
+
 }
 
 

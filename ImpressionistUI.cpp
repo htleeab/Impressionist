@@ -211,11 +211,18 @@ void ImpressionistUI::cb_pick_color(Fl_Menu_* o, void* v)
 	ImpressionistDoc *pDoc = whoami(o)->getDocument();
 	GLubyte Pickedcolor[3];
 	memcpy(Pickedcolor, pDoc->Pickedcolor, 3);
-	bool picked = fl_color_chooser("Color", Pickedcolor[0], Pickedcolor[1], Pickedcolor[2],-1);
+	int picked = fl_color_chooser("Color", Pickedcolor[0], Pickedcolor[1], Pickedcolor[2],-1);
 	if (picked) {
 		memcpy(pDoc->Pickedcolor, Pickedcolor, 3);
 		pDoc->colorPicked = true;
 	}
+}
+
+void ImpressionistUI::cb_auto_paint_button(Fl_Widget* o, void* v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+
+	pDoc->autoPaint();
 }
 //-------------------------------------------------------------
 // Brings up the paint dialog
@@ -258,22 +265,14 @@ void ImpressionistUI::cb_blur_filter_button(Fl_Widget* o, void* v)
 void ImpressionistUI::cb_sharpen_filter_button(Fl_Widget* o, void* v)
 {
 	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
-	if (pDoc->filterKernel) pDoc->deleteFilterKernel();
-	int size = pDoc->getSize();//Brush size
-	pDoc->filterKernel = new float*[size];
-	for (int i = 0; i < size; i++) {
-		pDoc->filterKernel[i] = new float[size];
-		//TODO: set the value of kernel
-		for (int j = 0; j < size; j++)
-			pDoc->filterKernel[i][j] = 1;
-	}
+	pDoc->sharpeningKernel();
 }
 
 void ImpressionistUI::cb_customize_filter_button(Fl_Widget* o, void* v)
 {
 	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
-	//TODO: set filter
-	pDoc->clearCanvas();
+	//TODO: 
+	pDoc->blurringKernel();
 }
 
 //-----------------------------------------------------------
@@ -564,7 +563,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_ClearCanvasButton->callback(cb_clear_canvas_button);
 
 		// Add brush size slider to the dialog 
-		m_BrushSizeSlider = new Fl_Value_Slider(10, 80, 300, 20, "Size");
+		m_BrushSizeSlider = new Fl_Value_Slider(10, 70, 300, 20, "Size");
 		m_BrushSizeSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_BrushSizeSlider->type(FL_HOR_NICE_SLIDER);
         m_BrushSizeSlider->labelfont(FL_COURIER);
@@ -576,7 +575,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushSizeSlider->align(FL_ALIGN_RIGHT);
 		m_BrushSizeSlider->callback(cb_sizeSlides);
 
-		m_BrushLineWidthSlider = new Fl_Value_Slider(10, 110, 300, 20, "Line Width");
+		m_BrushLineWidthSlider = new Fl_Value_Slider(10, 100, 300, 20, "Line Width");
 		m_BrushLineWidthSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_BrushLineWidthSlider->type(FL_HOR_NICE_SLIDER);
 		m_BrushLineWidthSlider->labelfont(FL_COURIER);
@@ -589,7 +588,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushLineWidthSlider->callback(cb_widthSlides);
 		m_BrushLineWidthSlider->deactivate();
 
-		m_BrushLineAngleSlider = new Fl_Value_Slider(10, 140, 300, 20, "Line Angle");
+		m_BrushLineAngleSlider = new Fl_Value_Slider(10, 130, 300, 20, "Line Angle");
 		m_BrushLineAngleSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_BrushLineAngleSlider->type(FL_HOR_NICE_SLIDER);
 		m_BrushLineAngleSlider->labelfont(FL_COURIER);
@@ -602,7 +601,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushLineAngleSlider->callback(cb_angleSlides);
 		m_BrushLineAngleSlider->deactivate();
 
-		m_BrushAlphaSlides = new Fl_Value_Slider(10, 170, 300, 20, "Alpha");
+		m_BrushAlphaSlides = new Fl_Value_Slider(10, 160, 300, 20, "Alpha");
 		m_BrushAlphaSlides->user_data((void*)(this));	// record self to be used by static callback functions
 		m_BrushAlphaSlides->type(FL_HOR_NICE_SLIDER);
 		m_BrushAlphaSlides->labelfont(FL_COURIER);
@@ -628,6 +627,10 @@ ImpressionistUI::ImpressionistUI() {
 		m_FilterCustomizeButton->user_data((void*)(this));
 		m_FilterCustomizeButton->callback(cb_customize_filter_button);
 		m_FilterCustomizeButton->deactivate();
+
+		m_ClearCanvasButton = new Fl_Button(10, 230, 150, 25, "&Auto Paint");
+		m_ClearCanvasButton->user_data((void*)(this));
+		m_ClearCanvasButton->callback(cb_auto_paint_button);
 
     m_brushDialog->end();	
 

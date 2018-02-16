@@ -32,9 +32,8 @@ void Highlighter::BrushMove(const Point source, const Point target)
 {
 	ImpressionistDoc* pDoc = GetDocument();
 	ImpressionistUI* dlg = pDoc->m_pUI;
-	float pi = 3.141592654;
 	int size = pDoc->getSize();
-	float angle = (float)pDoc->getAngle() / 360 * 2 * pi;
+	float angle = (float)pDoc->getAngle() / 360 * 2 * M_PI;
 
 	if (pDoc == NULL) {
 		printf("Highlighter::BrushMove  document is NULL\n");

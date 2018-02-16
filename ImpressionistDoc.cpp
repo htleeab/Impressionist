@@ -145,18 +145,16 @@ void ImpressionistDoc::updateBrushDirection(const Point source, const Point targ
 }
 
 void ImpressionistDoc::setMovementDirection(const Point target, bool start) {
-	float pi = 3.14159265;
 	if (start) {
 		movementAngle=0;
 	}
 	else {
-		movementAngle = atan2((previousPoint.y - target.y), (previousPoint.x - target.x)) * 180 / pi;
+		movementAngle = atan2((previousPoint.y - target.y), (previousPoint.x - target.x)) * 180 / M_PI;
 	}
 	previousPoint = target;
 }
 
 void ImpressionistDoc::setGradientDirection(const Point source) {
-	float pi = 3.141592654;
 	int sobelX[3][3] = { { -1,0,1 },{ -2,0,2 } ,{ -1,0,1 } };
 	int sobelY[3][3] = { { -1,-2,-1 },{ 0,0,0 } ,{ 1,2,1 } };
 	GLfloat grayscale[3][3];
@@ -177,7 +175,7 @@ void ImpressionistDoc::setGradientDirection(const Point source) {
 			sobelYValue += grayscale[i][j] * sobelY[i][j];
 		}
 	}
-	gradientAngle = atan2(sobelYValue, sobelXValue) * 180 / pi;
+	gradientAngle = atan2(sobelYValue, sobelXValue) * 180 / M_PI;
 }
 
 void ImpressionistDoc::deleteFilterKernel() {
@@ -192,7 +190,6 @@ void ImpressionistDoc::deleteFilterKernel() {
 
 void ImpressionistDoc::normalizeKernel() {
 	if (!filterKernel)return;
-
 	float sum=0;
 	for (int i = 0; i < filterKernelRow; i++) {
 		for (int j = 0; j < filterKernelCol; j++)
@@ -204,10 +201,10 @@ void ImpressionistDoc::normalizeKernel() {
 	}
 }
 
-void ImpressionistDoc::blurringKernel() {
-
+void ImpressionistDoc::blurringKernel() 
+{
 	if (filterKernel) deleteFilterKernel();
-	int size = getSize();//Brush size
+	int size = getSize();//filter size equal to brush size
 	filterKernelRow = size;
 	filterKernelCol = size;
 	filterKernel = new float*[size];
@@ -218,6 +215,24 @@ void ImpressionistDoc::blurringKernel() {
 		}
 	}
 }
+
+void ImpressionistDoc::sharpeningKernel() 
+{
+	if (filterKernel) deleteFilterKernel();
+	int size = 3;
+	filterKernelRow = size;
+	filterKernelCol = size;
+	filterKernel = new float*[size];
+	for (int i = 0; i < size; i++) {
+		filterKernel[i] = new float[size];
+		for (int j = 0; j < size; j++) {
+			filterKernel[i][j] = (float)-1;
+		}
+	}
+	filterKernel[1][1] = 9.0;
+	normalizeKernel();
+}
+
 
 //---------------------------------------------------------
 // Load the specified image
@@ -346,3 +361,9 @@ GLubyte* ImpressionistDoc::GetOriginalPixel( const Point p )
 }
 
 
+
+void ImpressionistDoc::autoPaint()
+{
+	m_pUI->m_paintView->autoPaint();
+
+}

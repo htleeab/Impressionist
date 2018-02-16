@@ -41,19 +41,7 @@ void CircleBrush::BrushMove(const Point source, const Point target)
 
 	glBegin(GL_POINTS);
 	
-
-	//glBegin(GL_TRIANGLE_FAN);
 	SetColor(source);
-	//glVertex2f(target.x, target.y); // center of circle
-	//GLint triangleAmount = 20;
-	//GLfloat twicePi = 2.0 * 3.141592654;
-	//for (int i = 0; i <= triangleAmount; i++) {
-	//	glVertex2f(
-	//		target.x + (pDoc->getSize() * cos(i * twicePi / triangleAmount)),
-	//		target.y + (pDoc->getSize() * sin(i * twicePi / triangleAmount))
-	//	);
-	//}
-	//glEnd();
 
 	glVertex2d(target.x, target.y);
 
