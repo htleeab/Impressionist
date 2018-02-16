@@ -179,6 +179,7 @@ void ImpressionistDoc::setGradientDirection(const Point source) {
 	//printf("gradientAngle: %f, sobelValue: (%f,%f)\n", gradientAngle, sobelXValue, sobelYValue);
 }
 
+
 //---------------------------------------------------------
 // Load the specified image
 // This is called by the UI when the load image button is 
@@ -306,3 +307,9 @@ GLubyte* ImpressionistDoc::GetOriginalPixel( const Point p )
 }
 
 
+
+void ImpressionistDoc::autoPaint()
+{
+	m_pUI->m_paintView->autoPaint();
+
+}

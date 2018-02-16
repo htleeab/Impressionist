@@ -45,6 +45,9 @@ void PointBrush::BrushMove( const Point source, const Point target )
 		glVertex2d( target.x, target.y );
 
 	glEnd();
+
+	//printf("Source: %d,%d\t", source.x, source.y);
+	//printf("Target: %d,%d\n", target.x, target.y);
 }
 
 void PointBrush::BrushEnd( const Point source, const Point target )

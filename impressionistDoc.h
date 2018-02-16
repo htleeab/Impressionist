@@ -36,6 +36,8 @@ public:
 	void	setMovementDirection(const Point target, bool start = false);
 	void	setGradientDirection(const Point source);
 
+	void	autoPaint();
+
 	char*	getImageName();					// get the current image name
 	
 
