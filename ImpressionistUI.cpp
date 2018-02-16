@@ -206,6 +206,17 @@ void ImpressionistUI::cb_swap_image(Fl_Menu_* o, void* v)
 	
 }
 
+void ImpressionistUI::cb_pick_color(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc *pDoc = whoami(o)->getDocument();
+	GLubyte Pickedcolor[3];
+	memcpy(Pickedcolor, pDoc->Pickedcolor, 3);
+	bool picked = fl_color_chooser("Color", Pickedcolor[0], Pickedcolor[1], Pickedcolor[2],-1);
+	if (picked) {
+		memcpy(pDoc->Pickedcolor, Pickedcolor, 3);
+		pDoc->colorPicked = true;
+	}
+}
 //-------------------------------------------------------------
 // Brings up the paint dialog
 // This is called by the UI when the brushes menu item
@@ -321,6 +332,8 @@ void ImpressionistUI::cb_angleSlides(Fl_Widget* o, void* v)
 void ImpressionistUI::cb_alphaSlides(Fl_Widget* o, void* v)
 {
 	((ImpressionistUI*)(o->user_data()))->m_alpha = float(((Fl_Slider *)o)->value());
+
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
 }
 
 //---------------------------------- per instance functions --------------------------------------
@@ -426,10 +439,10 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 	{ "&File",		0, 0, 0, FL_SUBMENU },
 		{ "&Load Image...",	FL_ALT + 'l', (Fl_Callback *)ImpressionistUI::cb_load_image },
 		{ "&Save Image...",	FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_save_image },
-		{ "&Swap Images",	FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_swap_image },
-		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes }, 
-		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
-		
+		{ "&Swap Images",	FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_swap_image ,0, FL_MENU_DIVIDER },
+		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes },
+		{ "&Color...",	FL_ALT + 'o', (Fl_Callback *)ImpressionistUI::cb_pick_color },
+		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },		
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
 		{ 0 },
 
