@@ -6,7 +6,6 @@
 
 
 #include <FL/fl_ask.h>
-
 #include <math.h>
 
 #include "impressionistUI.h"
@@ -253,7 +252,7 @@ void ImpressionistUI::cb_exit(Fl_Menu_* o, void* v)
 {
 	whoami(o)->m_mainWindow->hide();
 	whoami(o)->m_brushDialog->hide();
-
+	whoami(o)->filterDialog->hide();
 }
 
 void ImpressionistUI::cb_blur_filter_button(Fl_Widget* o, void* v)
@@ -270,9 +269,9 @@ void ImpressionistUI::cb_sharpen_filter_button(Fl_Widget* o, void* v)
 
 void ImpressionistUI::cb_customize_filter_button(Fl_Widget* o, void* v)
 {
-	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
-	//TODO: 
-	pDoc->blurringKernel();
+	//ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+	pUI->filterDialog->show();
 }
 
 //-----------------------------------------------------------
@@ -366,9 +365,77 @@ void ImpressionistUI::cb_angleSlides(Fl_Widget* o, void* v)
 void ImpressionistUI::cb_alphaSlides(Fl_Widget* o, void* v)
 {
 	((ImpressionistUI*)(o->user_data()))->m_alpha = float(((Fl_Slider *)o)->value());
-
-	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
 }
+
+void ImpressionistUI::cb_filterRowInput(Fl_Widget* o, void* v)
+{
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+	pUI->deleteFilterInput();
+	pUI->filterRow = atoi(((Fl_Int_Input *)o)->value());
+	pUI->applyFilterButton->deactivate();
+	pUI->applyConvolutionButton->deactivate();
+}
+void ImpressionistUI::cb_filterColInput(Fl_Widget* o, void* v)
+{
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+	pUI->deleteFilterInput();
+	pUI->filterCol = atoi(((Fl_Int_Input *)o)->value());
+	pUI->applyFilterButton->deactivate();
+	pUI->applyConvolutionButton->deactivate();
+}
+
+void ImpressionistUI::cb_init_filter(Fl_Widget* o, void* v) {
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+	printf("cb_init_filter\n");
+	pUI->deleteFilterInput();
+	pUI->filterDialog->begin();		
+		int row = pUI->filterRow;
+		int col = pUI->filterCol;
+		pUI->filterValueInput = new Fl_Int_Input**[row];
+		pUI->filterValue = new int*[row];
+		for (int i = 0; i < row; i++) {
+			pUI->filterValueInput[i] = new Fl_Int_Input*[col];
+			pUI->filterValue[i] = new int[col];
+			for (int j = 0; j < col; j++) {
+				pUI->filterValue[i][j] = 1;
+				pUI->filterValueInput[i][j]=new Fl_Int_Input(30+300/row*i, 50+200/col*j, 20, 20,"");
+				//pUI->filterValueInput[i][j]->user_data((void*)(this));
+				filterValueUserData* value_data = new filterValueUserData(pUI,i, j);
+				pUI->filterValueInput[i][j]->user_data(value_data); 
+				pUI->filterValueInput[i][j]->value("1");
+				pUI->filterValueInput[i][j]->callback(cb_update_filter);
+			}
+		}
+	pUI->filterDialog->end();
+	pUI->applyFilterButton->activate();
+	pUI->applyConvolutionButton->activate();
+	pUI->filterDialog->redraw();
+}
+
+void ImpressionistUI::cb_update_filter(Fl_Widget* o, void* v) {
+	filterValueUserData data = *(filterValueUserData*)(o->user_data());
+	ImpressionistUI* pUI = (ImpressionistUI*)(data.self);
+	int row = data.row_index;
+	int col = data.col_index;
+	int value = atoi(((Fl_Int_Input *)o)->value());//self value
+	pUI->filterValue[row][col] = value;
+}
+
+void ImpressionistUI::cb_apply_filter(Fl_Widget* o, void* v) {
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+	ImpressionistDoc * pDoc = pUI->getDocument();
+	pDoc->applyKernel(pUI->filterRow, pUI->filterCol, pUI->filterValue);
+}
+
+
+void ImpressionistUI::cb_convolution(Fl_Widget* o, void* v) {
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+	ImpressionistDoc * pDoc = pUI->getDocument();
+	pDoc->applyKernel(pUI->filterRow, pUI->filterCol, pUI->filterValue);
+	pDoc->autoPaint();
+}
+
+
 
 //---------------------------------- per instance functions --------------------------------------
 
@@ -408,6 +475,25 @@ void ImpressionistUI::setDocument(ImpressionistDoc* doc)
 
 	m_origView->m_pDoc = doc;
 	m_paintView->m_pDoc = doc;
+}
+
+void ImpressionistUI::deleteFilterInput() {
+	if (filterValueInput) {//When updating the size of filter, delete before update
+		for (int i = 0; i < filterRow; i++) {
+			for (int j = 0; j < filterCol; j++) {
+				filterDialog->remove(filterValueInput[i][j]);
+				delete filterValueInput[i][j];
+			}
+			delete[] filterValueInput[i];
+			delete[] filterValue[i];
+		}
+		delete[] filterValueInput;
+		delete[] filterValue;
+	}
+	filterValueInput = NULL;
+	filterValue = NULL;	
+	filterDialog->redraw();
+	printf("filter clear\n");
 }
 
 //------------------------------------------------
@@ -543,6 +629,9 @@ ImpressionistUI::ImpressionistUI() {
 	m_lWidth = 1;
 	m_lAngle = 0;
 	m_alpha = 1.0;
+	filterRow = 3;
+	filterCol = 3;
+	filterValue = NULL;
 
 	// brush dialog definition
 	m_brushDialog = new Fl_Window(400, 325, "Brush Dialog");
@@ -553,7 +642,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushTypeChoice->callback(cb_brushChoice);
 
 		m_BrushDirectionChoice = new Fl_Choice(110, 40, 150, 25, "&Stroke Direction");
-		m_BrushDirectionChoice->user_data((void*)(this));	// record self to be used by static callback functions
+		m_BrushDirectionChoice->user_data((void*)(this));
 		m_BrushDirectionChoice->menu(brushDirectionMenu);
 		m_BrushDirectionChoice->callback(cb_brushDirectionChoice);
 		m_BrushDirectionChoice->deactivate();
@@ -564,7 +653,7 @@ ImpressionistUI::ImpressionistUI() {
 
 		// Add brush size slider to the dialog 
 		m_BrushSizeSlider = new Fl_Value_Slider(10, 70, 300, 20, "Size");
-		m_BrushSizeSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_BrushSizeSlider->user_data((void*)(this));
 		m_BrushSizeSlider->type(FL_HOR_NICE_SLIDER);
         m_BrushSizeSlider->labelfont(FL_COURIER);
         m_BrushSizeSlider->labelsize(12);
@@ -576,7 +665,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushSizeSlider->callback(cb_sizeSlides);
 
 		m_BrushLineWidthSlider = new Fl_Value_Slider(10, 100, 300, 20, "Line Width");
-		m_BrushLineWidthSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_BrushLineWidthSlider->user_data((void*)(this));
 		m_BrushLineWidthSlider->type(FL_HOR_NICE_SLIDER);
 		m_BrushLineWidthSlider->labelfont(FL_COURIER);
 		m_BrushLineWidthSlider->labelsize(12);
@@ -623,7 +712,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_FilterSharpenButton->callback(cb_sharpen_filter_button);
 		m_FilterSharpenButton->deactivate();
 
-		m_FilterCustomizeButton = new Fl_Button(260, 190, 100, 25, "&Customize(TODO)");
+		m_FilterCustomizeButton = new Fl_Button(260, 190, 100, 25, "&Customize");
 		m_FilterCustomizeButton->user_data((void*)(this));
 		m_FilterCustomizeButton->callback(cb_customize_filter_button);
 		m_FilterCustomizeButton->deactivate();
@@ -634,5 +723,34 @@ ImpressionistUI::ImpressionistUI() {
 
     m_brushDialog->end();	
 
+	//FilterDialog
+
+	filterDialog = new Fl_Window(350, 350, "Filter Kernel");
+	
+		filterRowInput = new Fl_Int_Input(40, 20, 25, 25, "&Row");
+		filterRowInput->user_data((void*)(this));
+		filterRowInput->callback(cb_filterRowInput);
+
+		filterColInput = new Fl_Int_Input(120, 20, 25, 25, "&Col");
+		filterColInput->user_data((void*)(this));
+		filterColInput->callback(cb_filterColInput);
+
+		initFilterButton = new Fl_Button(250, 20, 75, 25, "&Init. Filter");
+		initFilterButton->user_data((void*)(this));
+		initFilterButton->callback(cb_init_filter);
+
+		filterValueInput = NULL;
+
+		applyFilterButton = new Fl_Button(50, 280, 100, 25, "&Apply As Brush");
+		applyFilterButton->user_data((void*)(this));
+		applyFilterButton->callback(cb_apply_filter);
+		applyFilterButton->deactivate();
+
+		applyConvolutionButton = new Fl_Button(175, 280, 125, 25, "&Apply Convolution");
+		applyConvolutionButton->user_data((void*)(this));
+		applyConvolutionButton->callback(cb_convolution);
+		applyConvolutionButton->deactivate();
+
+	filterDialog->end();
 }
 
