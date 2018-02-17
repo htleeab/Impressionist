@@ -61,6 +61,9 @@ public:
 	Fl_Choice*			m_BrushDirectionChoice;
 	Fl_Slider*			m_BrushAlphaSlides;
 
+	Fl_Button*			m_AutoPaintButton;
+	Fl_Button*			m_AnotherGradientButton;
+
 	//filter
 	Fl_Button*          m_FilterBlurButton;
 	Fl_Button*          m_FilterSharpenButton;
@@ -104,6 +107,7 @@ private:
 	int		filterCol;
 	bool	normalizeFilter; //default true
 	int**	filterValue;//2D array
+	bool	anotherGradientButtonBool;
 
 	// Static class members
 	static Fl_Menu_Item		menuitems[];
@@ -122,6 +126,7 @@ private:
 	static void	cb_clear_canvas(Fl_Menu_* o, void* v);
 	static void	cb_exit(Fl_Menu_* o, void* v);
 	static void	cb_about(Fl_Menu_* o, void* v);
+	static void cb_load_another_image(Fl_Menu_* o, void*);
 	static void	cb_brushChoice(Fl_Widget* o, void* v);
 	static void	cb_brushDirectionChoice(Fl_Widget* o, void* v);
 	static void	cb_clear_canvas_button(Fl_Widget* o, void* v);
@@ -131,6 +136,7 @@ private:
 	static void	cb_alphaSlides(Fl_Widget* o, void* v);
 
 	static void cb_auto_paint_button(Fl_Widget* o, void* v);
+	static void cb_another_gradient_button(Fl_Widget* o, void* v);
 
 	static void cb_blur_filter_button(Fl_Widget* o, void* v);
 	static void cb_sharpen_filter_button(Fl_Widget* o, void* v);

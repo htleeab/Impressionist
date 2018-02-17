@@ -223,6 +223,20 @@ void ImpressionistUI::cb_auto_paint_button(Fl_Widget* o, void* v)
 
 	pDoc->autoPaint();
 }
+void ImpressionistUI::cb_another_gradient_button(Fl_Widget * o, void * v)
+{
+	ImpressionistUI *pUI = ((ImpressionistUI*)(o->user_data()));
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+
+	if (pUI->anotherGradientButtonBool == true) {
+		pUI->anotherGradientButtonBool = false;
+		pDoc->useAnotherGradient(false);
+	}
+	else {
+		pUI->anotherGradientButtonBool = true;
+		pDoc->useAnotherGradient(true);
+	}
+}
 //-------------------------------------------------------------
 // Brings up the paint dialog
 // This is called by the UI when the brushes menu item
@@ -283,6 +297,17 @@ void ImpressionistUI::cb_about(Fl_Menu_* o, void* v)
 	fl_message("Impressionist FLTK version for CS341, Spring 2002");
 }
 
+
+void ImpressionistUI::cb_load_another_image(Fl_Menu_ * o, void *)
+{
+	ImpressionistDoc *pDoc = whoami(o)->getDocument();
+
+	char* newfile = fl_file_chooser("Open File?", "*.bmp", pDoc->getImageName());
+	if (newfile != NULL) {
+		pDoc->loadAnotherImage(newfile);
+	}
+}
+
 //------- UI should keep track of the current for all the controls for answering the query from Doc ---------
 //-------------------------------------------------------------
 // Sets the type of brush to use to the one chosen in the brush 
@@ -302,6 +327,7 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 		pUI->m_BrushDirectionChoice->activate();
 		pUI->m_BrushLineWidthSlider->activate();
 		pUI->m_BrushLineAngleSlider->activate();
+		pUI->m_AnotherGradientButton->activate();
 	}else{
 		pUI->m_BrushDirectionChoice->deactivate();
 		pUI->m_BrushLineWidthSlider->deactivate();
@@ -566,7 +592,8 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Swap Images",	FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_swap_image ,0, FL_MENU_DIVIDER },
 		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes },
 		{ "&Color...",	FL_ALT + 'o', (Fl_Callback *)ImpressionistUI::cb_pick_color },
-		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },		
+		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
+		{ "&Load another Image", FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_load_another_image, 0, FL_MENU_DIVIDER },
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
 		{ 0 },
 
@@ -721,9 +748,15 @@ ImpressionistUI::ImpressionistUI() {
 		m_FilterCustomizeButton->callback(cb_customize_filter_button);
 		m_FilterCustomizeButton->deactivate();
 
-		m_ClearCanvasButton = new Fl_Button(10, 230, 150, 25, "&Auto Paint");
-		m_ClearCanvasButton->user_data((void*)(this));
-		m_ClearCanvasButton->callback(cb_auto_paint_button);
+		m_AutoPaintButton = new Fl_Button(10, 230, 120, 25, "&Auto Paint");
+		m_AutoPaintButton->user_data((void*)(this));
+		m_AutoPaintButton->callback(cb_auto_paint_button);
+
+		m_AnotherGradientButton = new Fl_Light_Button(150, 230, 125, 25, "&Another Gradient");
+		m_AnotherGradientButton->user_data((void*)(this));
+		m_AnotherGradientButton->callback(cb_another_gradient_button);
+		m_AnotherGradientButton->deactivate();
+		anotherGradientButtonBool = false;
 
     m_brushDialog->end();	
 
