@@ -34,6 +34,7 @@ ImpressionistDoc::ImpressionistDoc()
 	m_nWidth		= -1;
 	m_ucBitmap		= NULL;
 	m_ucPainting	= NULL;
+	m_ucAnotherImage	= NULL;
 	filterKernel	= NULL;
 
 	// create one instance of each brush
@@ -64,6 +65,8 @@ ImpressionistDoc::ImpressionistDoc()
 	m_pCurrentBrushDirection = 0;
 
 	colorPicked = false;
+
+	useAnotherGradientBool = false;
 }
 
 
@@ -161,12 +164,17 @@ void ImpressionistDoc::setMovementDirection(const Point target, bool start) {
 
 void ImpressionistDoc::setGradientDirection(const Point source) {
 	int sobelX[3][3] = { { -1,0,1 },{ -2,0,2 } ,{ -1,0,1 } };
-	int sobelY[3][3] = { { -1,-2,-1 },{ 0,0,0 } ,{ 1,2,1 } };
+	int sobelY[3][3] = { { 1,2,1 },{ 0,0,0 } ,{ -1,-2,-1 } };
 	GLfloat grayscale[3][3];
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j <  3; j++) {
 			GLubyte color[3] = {0,0,0};
-			memcpy(color, GetOriginalPixel(source.x + i-1, source.y+j-1),3);
+			if (m_ucAnotherImage&&useAnotherGradientBool) {
+				memcpy(color, GetAnotherImagePixel(source.x + i - 1, source.y + j - 1), 3);
+			}
+			else {
+				memcpy(color, GetOriginalPixel(source.x + i - 1, source.y + j - 1), 3);
+			}
 			grayscale[i][j] = (static_cast<GLfloat>(color[0])/255 + static_cast<GLfloat>(color[1])/255 + static_cast<GLfloat>(color[2])/255) / 3;
 		}
 	}
@@ -181,6 +189,11 @@ void ImpressionistDoc::setGradientDirection(const Point source) {
 		}
 	}
 	gradientAngle = atan2(sobelYValue, sobelXValue) * 180 / M_PI;
+}
+
+void ImpressionistDoc::useAnotherGradient(bool v)
+{
+	useAnotherGradientBool = v;
 }
 
 void ImpressionistDoc::deleteFilterKernel() {
@@ -333,6 +346,34 @@ int ImpressionistDoc::swapImage() {
 	return 1;
 }
 
+int ImpressionistDoc::loadAnotherImage(char * iname)
+{
+	// try to open the image to read
+	unsigned char*	data;
+	int				width,
+					height;
+
+	if ((data = readBMP(iname, width, height)) == NULL)
+	{
+		fl_alert("Can't load bitmap file");
+		return 0;
+	}
+
+	// check dimension
+	if (m_nWidth != width || m_nHeight != height) {
+		fl_alert("Different Dimension!");
+		delete[] data;
+		return 0;
+	}
+
+	// release old storage
+	if (m_ucAnotherImage) delete[] m_ucAnotherImage;
+
+	m_ucAnotherImage = data;
+
+	return 1;
+}
+
 //----------------------------------------------------------------
 // Clear the drawing canvas
 // This is called by the UI when the clear canvas menu item is 
@@ -389,4 +430,19 @@ void ImpressionistDoc::autoPaint()
 {
 	m_pUI->m_paintView->autoPaint();
 
+}
+
+GLubyte* ImpressionistDoc::GetAnotherImagePixel(int x, int y)
+{
+	if (x < 0)
+		x = 0;
+	else if (x >= m_nWidth)
+		x = m_nWidth - 1;
+
+	if (y < 0)
+		y = 0;
+	else if (y >= m_nHeight)
+		y = m_nHeight - 1;
+
+	return (GLubyte*)(m_ucAnotherImage + 3 * (y*m_nWidth + x));
 }
