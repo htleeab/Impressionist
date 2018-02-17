@@ -21,6 +21,7 @@
 #include "ScatteredCirclesBrush.h"
 #include "Highlighter.h"
 #include "FilterBrush.h"
+#include "AlphaMappedBrush.h"
 #include <math.h>
 
 
@@ -34,7 +35,8 @@ ImpressionistDoc::ImpressionistDoc()
 	m_nWidth		= -1;
 	m_ucBitmap		= NULL;
 	m_ucPainting	= NULL;
-	m_ucAnotherImage	= NULL;
+	m_ucAnotherImage = NULL;
+	brushBitmap		= NULL;
 	filterKernel	= NULL;
 
 	// create one instance of each brush
@@ -58,7 +60,8 @@ ImpressionistDoc::ImpressionistDoc()
 		= new Highlighter(this, "Highlighter");
 	ImpBrush::c_pBrushes[BRUSH_FILTER]
 		= new FilterBrush(this, "Filter");
-
+	ImpBrush::c_pBrushes[BRUSH_ALPHA_MAPPED]
+		= new AlphaMappedBrush(this, "Alpha-Mapped");
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
 
@@ -374,6 +377,47 @@ int ImpressionistDoc::loadAnotherImage(char * iname)
 	return 1;
 }
 
+int ImpressionistDoc::loadBrushBitmap(char * iname)
+{
+	// try to open the image to read
+	unsigned char*	data;
+	int				width,
+					height;
+
+	if ((data = readBMP(iname, width, height)) == NULL)
+	{
+		fl_alert("Can't load bitmap file");
+		return 0;
+	}
+
+	// release old storage
+	if (brushBitmap) {
+		for (int i = 0; i < brushBitmapHeight; i++) {
+			delete[] brushBitmap[i];
+		}
+		delete[] brushBitmap; 
+	}
+
+	brushBitmapWidth = width;
+	brushBitmapHeight = height;
+
+	brushBitmap = new float*[height];
+	for (int i = 0; i < height; i++) {
+		brushBitmap[i] = new float[width];
+	}
+
+	GLubyte color[3];
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
+			memcpy(color, data + 3 * (j*width + i),3);
+			brushBitmap[i][j] = ((float)color[0] / 255.0 + (float)color[1] / 255.0 + (float)color[2]/255.0) / 3.0;
+			//printf("color (%x,%x,%x)\tcolor (%f,%f,%f)\talpha: (%f)\n", color[0], color[1], color[2], (float)color[0] / 255.0, color[1] / 255.0, color[2] / 255.0, brushBitmap[i][j]);
+		}
+	}
+	
+	return 1;
+}
+
 //----------------------------------------------------------------
 // Clear the drawing canvas
 // This is called by the UI when the clear canvas menu item is 
@@ -424,7 +468,20 @@ GLubyte* ImpressionistDoc::GetOriginalPixel( const Point p )
 	return GetOriginalPixel( p.x, p.y );
 }
 
+GLubyte* ImpressionistDoc::GetBitmapPixel(int x, int y)
+{
+	if (x < 0)
+		x = 0;
+	else if (x >= brushBitmapWidth)
+		x = m_nWidth - 1;
 
+	if (y < 0)
+		y = 0;
+	else if (y >= brushBitmapHeight)
+		y = brushBitmapHeight - 1;
+
+	return (GLubyte*)(brushBitmap + 3 * (y*brushBitmapWidth + x));
+}
 
 void ImpressionistDoc::autoPaint()
 {

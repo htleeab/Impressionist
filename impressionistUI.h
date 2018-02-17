@@ -76,6 +76,7 @@ public:
 	Fl_Button*			applyFilterButton;
 	Fl_Button*			applyConvolutionButton;
 	Fl_Check_Button*	normalizeFilterCheckBox;
+	Fl_Button*			m_loadBrushButton;
 
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
@@ -148,6 +149,7 @@ private:
 	static void cb_normalize_checkbox(Fl_Widget* o, void* v);
 	static void cb_apply_filter(Fl_Widget* o, void* v);
 	static void cb_convolution(Fl_Widget* o, void* v);
+	static void cb_load_brush_bitmap(Fl_Widget* o, void* v);
 
 };
 

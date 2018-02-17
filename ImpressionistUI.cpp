@@ -343,6 +343,12 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 		pUI->m_FilterSharpenButton->deactivate();
 		pUI->m_FilterCustomizeButton->deactivate();
 	}
+	if (type == 8) {
+		pUI->m_loadBrushButton->activate();
+	}
+	else {
+		pUI->m_loadBrushButton->deactivate();
+	}
 
 }
 
@@ -423,7 +429,7 @@ void ImpressionistUI::cb_init_filter(Fl_Widget* o, void* v) {
 			pUI->filterValue[i] = new int[col];
 			for (int j = 0; j < col; j++) {
 				pUI->filterValue[i][j] = 1;
-				pUI->filterValueInput[i][j]=new Fl_Int_Input(30+300/row*i, 50+200/col*j, 20, 20,"");
+				pUI->filterValueInput[i][j]=new Fl_Int_Input(30+300/col*j, 50+200/row*i, 20, 20,"");
 				filterValueUserData* value_data = new filterValueUserData(pUI,i, j);
 				pUI->filterValueInput[i][j]->user_data(value_data); 
 				pUI->filterValueInput[i][j]->value("1");
@@ -448,7 +454,6 @@ void ImpressionistUI::cb_update_filter(Fl_Widget* o, void* v) {
 
 void ImpressionistUI::cb_normalize_checkbox(Fl_Widget* o, void* v) {
 	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
-	ImpressionistDoc * pDoc = pUI->getDocument();
 	pUI->normalizeFilter = ((Fl_Check_Button *)o)->value();
 }
 
@@ -466,7 +471,15 @@ void ImpressionistUI::cb_convolution(Fl_Widget* o, void* v) {
 	pDoc->autoPaint();
 }
 
+void ImpressionistUI::cb_load_brush_bitmap(Fl_Widget* o, void* v) 
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
 
+	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for brush alpha", "*.bmp", pDoc->getImageName());
+	if (newfile != NULL) {
+		pDoc->loadBrushBitmap(newfile);
+	}
+}
 
 //---------------------------------- per instance functions --------------------------------------
 
@@ -614,6 +627,7 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
   {"Scattered Circles",	FL_ALT+'d', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SCATTERED_CIRCLES},
   {"Highlighter",	FL_ALT + 'h', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_HIGHLIGHTER },
   { "Filter",	FL_ALT + 'h', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_FILTER },
+  { "Alpha-Mapped",	FL_ALT + 'h', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_ALPHA_MAPPED },
   {0}
 };
 
@@ -672,7 +686,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushTypeChoice->menu(brushTypeMenu);
 		m_BrushTypeChoice->callback(cb_brushChoice);
 
-		m_BrushDirectionChoice = new Fl_Choice(110, 40, 150, 25, "&Stroke Direction");
+		m_BrushDirectionChoice = new Fl_Choice(120, 40, 150, 25, "&Stroke Direction");
 		m_BrushDirectionChoice->user_data((void*)(this));
 		m_BrushDirectionChoice->menu(brushDirectionMenu);
 		m_BrushDirectionChoice->callback(cb_brushDirectionChoice);
@@ -733,20 +747,25 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushAlphaSlides->align(FL_ALIGN_RIGHT);
 		m_BrushAlphaSlides->callback(cb_alphaSlides);
 
-		m_FilterBlurButton = new Fl_Button(20, 190, 85, 25, "&Blurring");
+		m_FilterBlurButton = new Fl_Button(10, 190, 80, 25, "&Blurring");
 		m_FilterBlurButton->user_data((void*)(this));
 		m_FilterBlurButton->callback(cb_blur_filter_button);
 		m_FilterBlurButton->deactivate();
 
-		m_FilterSharpenButton = new Fl_Button(130, 190, 85, 25, "&Sharpening");
+		m_FilterSharpenButton = new Fl_Button(105, 190, 85, 25, "&Sharpening");
 		m_FilterSharpenButton->user_data((void*)(this));
 		m_FilterSharpenButton->callback(cb_sharpen_filter_button);
 		m_FilterSharpenButton->deactivate();
 
-		m_FilterCustomizeButton = new Fl_Button(260, 190, 100, 25, "&Customize");
+		m_FilterCustomizeButton = new Fl_Button(200, 190, 85, 25, "&Customize");
 		m_FilterCustomizeButton->user_data((void*)(this));
 		m_FilterCustomizeButton->callback(cb_customize_filter_button);
 		m_FilterCustomizeButton->deactivate();
+
+		m_loadBrushButton = new Fl_Button(300, 190, 85, 25, "&Load brush");
+		m_loadBrushButton->user_data((void*)(this));
+		m_loadBrushButton->callback(cb_load_brush_bitmap);
+		m_loadBrushButton->deactivate();
 
 		m_AutoPaintButton = new Fl_Button(10, 230, 120, 25, "&Auto Paint");
 		m_AutoPaintButton->user_data((void*)(this));
