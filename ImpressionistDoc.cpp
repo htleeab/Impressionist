@@ -97,6 +97,11 @@ int ImpressionistDoc::getSize()
 	return m_pUI->getSize();
 }
 
+void ImpressionistDoc::setSize(int size)
+{
+	m_pUI->setSize(size);
+}
+
 int ImpressionistDoc::getWidth()
 {
 	return m_pUI->getWidth();

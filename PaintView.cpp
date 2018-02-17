@@ -10,6 +10,9 @@
 #include "paintView.h"
 #include "ImpBrush.h"
 #include <math.h>
+#include <vector>
+#include <algorithm>
+
 
 
 #define LEFT_MOUSE_DOWN		1
@@ -260,45 +263,39 @@ void PaintView::RestoreContent()
 
 void PaintView::autoPaintDetails()
 {
-
-	
-
-	Point source(0, 0);
 	Point target(0, 0);
 
 
-	int size = m_pDoc->getSize();
+	int original_size = m_pDoc->getSize();
 
-	while(target.x<m_nDrawWidth) {
-		source.x += size / 2 + 3;
-		target.x += size / 2 + 3;
-		while (target.y<m_nDrawHeight) {
-			source.y += size / 2 + 3;
-			target.y += size / 2 + 3;
+	std::vector<Point> points_v;
 
-			int number_of_draws = 5;
+	while (target.x < m_nDrawWidth) {
+		target.x += original_size / 4 + 2;
+		while (target.y < m_nDrawHeight) {
+			target.y += original_size / 4 + 2;
 
-			m_pDoc->updateBrushDirection(source, target, true);
-			m_pDoc->m_pCurrentBrush->BrushBegin(source, target);
-			for (int i = 0; i < number_of_draws; i++) {
-				Point p_source;
-				p_source.x = target.x + rand() % size - size / 2;
-				p_source.y = target.y + rand() % size - size / 2;
+			points_v.push_back(target);
 
-				Point p_target = p_source;
-
-				m_pDoc->m_pCurrentBrush->BrushMove(p_source, p_target);
-			}
-			m_pDoc->m_pCurrentBrush->BrushEnd(source, target);
 		}
 		target.y = 0;
 	}
 
+	std::random_shuffle(points_v.begin(), points_v.end());
+	m_pDoc->updateBrushDirection(points_v.front(), points_v.front(), true);
+	m_pDoc->m_pCurrentBrush->BrushBegin(points_v.front(), points_v.front());
+	for (std::vector<Point>::iterator it = points_v.begin(); it != points_v.end(); it++) {
+		int size = original_size + rand() % original_size - original_size / 2;
+		m_pDoc->setSize(size);
+		
+		m_pDoc->m_pCurrentBrush->BrushMove(*it, *it);
+		m_pDoc->m_pCurrentBrush->BrushEnd(*it, *it);
+	}
+
+	m_pDoc->setSize(original_size);
 	SaveCurrentContent();
 	RestoreContent();
-	//glFlush();
 
-	//draw();
 }
 
 void PaintView::autoPaint()
