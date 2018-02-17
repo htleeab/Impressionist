@@ -23,6 +23,7 @@ public:
 	int		saveImage(char *iname);			// called by the UI to save image
 	int		swapImage();
 	int		loadAnotherImage(char *iname);
+	int		loadBrushBitmap(char * iname);
 
 	int     clearCanvas();                  // called by the UI to clear the drawing canvas
 	void	setBrushType(int type);			// called by the UI to set the brushType
@@ -61,17 +62,20 @@ public:
 	unsigned char*	m_ucBitmap;
 	unsigned char*	m_ucPainting;
 	unsigned char*	m_ucAnotherImage;
+	float**			brushBitmap;
 
 
 	// The current active brush.
 	ImpBrush*			m_pCurrentBrush;	
 	// Size of the brush.
-	int				m_nSize;					
+	int				m_nSize;		
 	int				m_pCurrentBrushDirection;
 	Point			previousPoint;
 	float			movementAngle;
 	float			gradientAngle;
 	bool			useAnotherGradientBool;
+	int				brushBitmapWidth;
+	int				brushBitmapHeight;
 
 	bool			colorPicked;
 	GLubyte			Pickedcolor[3];
@@ -86,7 +90,8 @@ public:
 	// Get the color of the original picture at the specified coord
 	GLubyte* GetOriginalPixel( int x, int y );   
 	// Get the color of the original picture at the specified point	
-	GLubyte* GetOriginalPixel( const Point p );  
+	GLubyte* GetOriginalPixel( const Point p );
+	GLubyte * GetBitmapPixel(int x, int y);
 	// Get the color of the another picture at the specified point
 	GLubyte* GetAnotherImagePixel(int x, int y);
 
