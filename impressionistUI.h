@@ -10,7 +10,9 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/fl_file_chooser.H>		// FLTK file chooser
-#include <FL/Fl_Color_Chooser.H>		// FLTK file chooser
+#include <FL/Fl_Color_Chooser.H>
+#include <FL/Fl_Int_Input.H>
+
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Value_Slider.H>
 #include <FL/Fl_Choice.H>
@@ -22,6 +24,18 @@
 #include "PaintView.h"
 
 #include "ImpBrush.h"
+
+struct filterValueUserData {
+	void* self;
+	int row_index;
+	int col_index;
+
+	filterValueUserData(void* pointer, int i, int j) {
+		self = pointer;
+		row_index = i;
+		col_index = j;
+	}
+};
 
 class ImpressionistUI {
 public:
@@ -45,10 +59,18 @@ public:
 	Fl_Slider*			m_BrushLineAngleSlider;
 	Fl_Choice*			m_BrushDirectionChoice;
 	Fl_Slider*			m_BrushAlphaSlides;
+
 	//filter
 	Fl_Button*          m_FilterBlurButton;
 	Fl_Button*          m_FilterSharpenButton;
 	Fl_Button*          m_FilterCustomizeButton;
+	Fl_Window*			filterDialog;
+	Fl_Int_Input*		filterRowInput;
+	Fl_Int_Input*		filterColInput;
+	Fl_Button*			initFilterButton;
+	Fl_Int_Input***		filterValueInput;//2D pointers
+	Fl_Button*			applyFilterButton;
+	Fl_Button*			applyConvolutionButton;
 
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
@@ -56,9 +78,9 @@ public:
 
 	void				show();
 	void				resize_windows(int w, int h);
+	void				deleteFilterInput();
 
 	// Interface to get attribute
-
 	int					getSize();
 	void				setSize(int size);
 	int					getWidth();
@@ -76,6 +98,9 @@ private:
 	int		m_lWidth;
 	int		m_lAngle;
 	float	m_alpha;
+	int		filterRow;	//it is the number of int input box, the filter size that using should be found in Doc
+	int		filterCol;
+	int**	filterValue;//2D array
 
 	// Static class members
 	static Fl_Menu_Item		menuitems[];
@@ -101,10 +126,18 @@ private:
 	static void	cb_widthSlides(Fl_Widget* o, void* v);
 	static void	cb_angleSlides(Fl_Widget* o, void* v);
 	static void	cb_alphaSlides(Fl_Widget* o, void* v);
+
+	static void cb_auto_paint_button(Fl_Widget* o, void* v);
+
 	static void cb_blur_filter_button(Fl_Widget* o, void* v);
 	static void cb_sharpen_filter_button(Fl_Widget* o, void* v);
 	static void cb_customize_filter_button(Fl_Widget* o, void* v);
-	static void cb_auto_paint_button(Fl_Widget* o, void* v);
+	static void cb_filterRowInput(Fl_Widget* o, void* v);
+	static void cb_filterColInput(Fl_Widget* o, void* v);
+	static void cb_init_filter(Fl_Widget* o, void* v);
+	static void cb_update_filter(Fl_Widget* o, void* v);
+	static void cb_apply_filter(Fl_Widget* o, void* v);
+	static void cb_convolution(Fl_Widget* o, void* v);
 
 };
 

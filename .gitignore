@@ -7,3 +7,5 @@
 #User-specific files
 *.VC.opendb
 *.VC.db
+impressionist.VC.db
+*.suo

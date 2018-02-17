@@ -238,6 +238,23 @@ void ImpressionistDoc::sharpeningKernel()
 	normalizeKernel();
 }
 
+void ImpressionistDoc::applyKernel(int row, int col, int ** filter)
+{
+	if (filterKernel) deleteFilterKernel();
+	filterKernelRow = row;
+	filterKernelCol = col;
+	filterKernel = new float*[row];
+	for (int i = 0; i < row; i++) {
+		filterKernel[i] = new float[col];
+		for (int j = 0; j < col; j++) {
+			//reflect for convolution
+			filterKernel[i][j] = filter[row-i-1][col-j-1];
+			//casting
+		}
+	}
+	normalizeKernel();
+}
+
 
 //---------------------------------------------------------
 // Load the specified image
