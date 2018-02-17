@@ -238,7 +238,7 @@ void ImpressionistDoc::sharpeningKernel()
 	normalizeKernel();
 }
 
-void ImpressionistDoc::applyKernel(int row, int col, int ** filter)
+void ImpressionistDoc::applyKernel(int row, int col, int ** filter, bool normalize)
 {
 	if (filterKernel) deleteFilterKernel();
 	filterKernelRow = row;
@@ -252,7 +252,8 @@ void ImpressionistDoc::applyKernel(int row, int col, int ** filter)
 			//casting
 		}
 	}
-	normalizeKernel();
+	if (normalize)
+		normalizeKernel();
 }
 
 
