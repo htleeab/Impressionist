@@ -23,6 +23,7 @@ public:
 	int		saveImage(char *iname);			// called by the UI to save image
 	int		swapImage();
 	int		loadAnotherImage(char *iname);
+	int		loadEdgeImage(char* iname);
 	int		loadBrushBitmap(char * iname);
 
 	int     clearCanvas();                  // called by the UI to clear the drawing canvas
@@ -66,6 +67,7 @@ public:
 	unsigned char*	m_ucBitmap;
 	unsigned char*	m_ucPainting;
 	unsigned char*	m_ucAnotherImage;
+	unsigned char*	m_ucEdgeImage;
 	float**			brushBitmap;
 
 	unsigned char*	m_ucUndoBuffer;
@@ -79,6 +81,9 @@ public:
 	float			movementAngle;
 	float			gradientAngle;
 	bool			useAnotherGradientBool;
+
+	bool			edgeClippingBool;
+
 	int				brushBitmapWidth;
 	int				brushBitmapHeight;
 
@@ -96,9 +101,11 @@ public:
 	GLubyte* GetOriginalPixel( int x, int y );   
 	// Get the color of the original picture at the specified point	
 	GLubyte* GetOriginalPixel( const Point p );
-	GLubyte * GetBitmapPixel(int x, int y);
 	// Get the color of the another picture at the specified point
 	GLubyte* GetAnotherImagePixel(int x, int y);
+	// Get the color of the edge picture at the specified point
+	GLubyte* GetEdgeImagePixel(int x, int y);
+	GLubyte * GetTargetImagePixel(int x, int y, unsigned char * image);
 
 
 private:

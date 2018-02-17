@@ -63,6 +63,7 @@ public:
 
 	Fl_Button*			m_AutoPaintButton;
 	Fl_Button*			m_AnotherGradientButton;
+	Fl_Check_Button*	edgeClippingButton;
 
 	//filter
 	Fl_Button*          m_FilterBlurButton;
@@ -128,6 +129,7 @@ private:
 	static void	cb_exit(Fl_Menu_* o, void* v);
 	static void	cb_about(Fl_Menu_* o, void* v);
 	static void cb_load_another_image(Fl_Menu_* o, void*);
+	static void cb_load_edge_image(Fl_Menu_ * o, void *);
 	static void	cb_brushChoice(Fl_Widget* o, void* v);
 	static void	cb_brushDirectionChoice(Fl_Widget* o, void* v);
 	static void	cb_clear_canvas_button(Fl_Widget* o, void* v);
@@ -139,6 +141,8 @@ private:
 	static void cb_auto_paint_button(Fl_Widget* o, void* v);
 	static void cb_another_gradient_button(Fl_Widget* o, void* v);
 	static void cb_undo_button(Fl_Widget* o, void* v);
+
+	static void cb_edge_clipping_checkBox(Fl_Widget* o, void* v);
 
 	static void cb_blur_filter_button(Fl_Widget* o, void* v);
 	static void cb_sharpen_filter_button(Fl_Widget* o, void* v);
