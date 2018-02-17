@@ -41,6 +41,10 @@ public:
 
 	void	autoPaint();
 
+	//for undo
+	void	saveUndobuffer();
+	void	undo();
+
 	char*	getImageName();					// get the current image name
 
 	void	deleteFilterKernel();
@@ -64,6 +68,7 @@ public:
 	unsigned char*	m_ucAnotherImage;
 	float**			brushBitmap;
 
+	unsigned char*	m_ucUndoBuffer;
 
 	// The current active brush.
 	ImpBrush*			m_pCurrentBrush;	

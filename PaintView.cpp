@@ -108,6 +108,7 @@ void PaintView::draw()
 		// Clear it after processing.
 		isAnEvent	= 0;	
 
+
 		Point source( coord.x + m_nStartCol, m_nEndRow - coord.y );
 		Point target( coord.x, m_nWindowHeight - coord.y );
 		
@@ -116,8 +117,10 @@ void PaintView::draw()
 		{
 		case LEFT_MOUSE_DOWN:
 			m_pDoc->updateBrushDirection(source, target, true);
-			if (isInRange(target))// 1.2 cut out of range
-				m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
+			if (isInRange(target)) {// 1.2 cut out of range
+				m_pDoc->m_pCurrentBrush->BrushBegin(source, target);
+				m_pDoc->saveUndobuffer();
+			}
 			break;
 		case LEFT_MOUSE_DRAG:
 			m_pDoc->updateBrushDirection(source, target);
