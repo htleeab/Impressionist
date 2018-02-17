@@ -237,6 +237,12 @@ void ImpressionistUI::cb_another_gradient_button(Fl_Widget * o, void * v)
 		pDoc->useAnotherGradient(true);
 	}
 }
+void ImpressionistUI::cb_undo_button(Fl_Widget * o, void * v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+
+	pDoc->undo();
+}
 //-------------------------------------------------------------
 // Brings up the paint dialog
 // This is called by the UI when the brushes menu item
@@ -776,6 +782,10 @@ ImpressionistUI::ImpressionistUI() {
 		m_AnotherGradientButton->callback(cb_another_gradient_button);
 		m_AnotherGradientButton->deactivate();
 		anotherGradientButtonBool = false;
+
+		m_AutoPaintButton = new Fl_Button(280, 40, 60, 25, "&Undo");
+		m_AutoPaintButton->user_data((void*)(this));
+		m_AutoPaintButton->callback(cb_undo_button);
 
     m_brushDialog->end();	
 
