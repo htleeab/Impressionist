@@ -137,6 +137,7 @@ private:
 
 	static void cb_auto_paint_button(Fl_Widget* o, void* v);
 	static void cb_another_gradient_button(Fl_Widget* o, void* v);
+	static void cb_undo_button(Fl_Widget* o, void* v);
 
 	static void cb_blur_filter_button(Fl_Widget* o, void* v);
 	static void cb_sharpen_filter_button(Fl_Widget* o, void* v);

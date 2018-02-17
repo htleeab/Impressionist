@@ -35,6 +35,7 @@ ImpressionistDoc::ImpressionistDoc()
 	m_ucBitmap		= NULL;
 	m_ucPainting	= NULL;
 	m_ucAnotherImage	= NULL;
+	m_ucUndoBuffer = NULL;
 	filterKernel	= NULL;
 
 	// create one instance of each brush
@@ -432,6 +433,18 @@ void ImpressionistDoc::autoPaint()
 
 }
 
+void ImpressionistDoc::saveUndobuffer()
+{
+	if (!m_ucUndoBuffer) m_ucUndoBuffer = new unsigned char[3 * m_nWidth*m_nHeight];
+	memcpy(m_ucUndoBuffer, m_ucPainting, 3* m_nWidth*m_nHeight);
+}
+
+void ImpressionistDoc::undo()
+{
+	memcpy(m_ucPainting, m_ucUndoBuffer, 3 * m_nWidth*m_nHeight);
+	m_pUI->m_paintView->refresh();
+}
+
 GLubyte* ImpressionistDoc::GetAnotherImagePixel(int x, int y)
 {
 	if (x < 0)
@@ -446,3 +459,4 @@ GLubyte* ImpressionistDoc::GetAnotherImagePixel(int x, int y)
 
 	return (GLubyte*)(m_ucAnotherImage + 3 * (y*m_nWidth + x));
 }
+
