@@ -386,7 +386,6 @@ void ImpressionistUI::cb_filterColInput(Fl_Widget* o, void* v)
 
 void ImpressionistUI::cb_init_filter(Fl_Widget* o, void* v) {
 	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
-	printf("cb_init_filter\n");
 	pUI->deleteFilterInput();
 	pUI->filterDialog->begin();		
 		int row = pUI->filterRow;
@@ -399,7 +398,6 @@ void ImpressionistUI::cb_init_filter(Fl_Widget* o, void* v) {
 			for (int j = 0; j < col; j++) {
 				pUI->filterValue[i][j] = 1;
 				pUI->filterValueInput[i][j]=new Fl_Int_Input(30+300/row*i, 50+200/col*j, 20, 20,"");
-				//pUI->filterValueInput[i][j]->user_data((void*)(this));
 				filterValueUserData* value_data = new filterValueUserData(pUI,i, j);
 				pUI->filterValueInput[i][j]->user_data(value_data); 
 				pUI->filterValueInput[i][j]->value("1");
@@ -421,17 +419,24 @@ void ImpressionistUI::cb_update_filter(Fl_Widget* o, void* v) {
 	pUI->filterValue[row][col] = value;
 }
 
+
+void ImpressionistUI::cb_normalize_checkbox(Fl_Widget* o, void* v) {
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+	ImpressionistDoc * pDoc = pUI->getDocument();
+	pUI->normalizeFilter = ((Fl_Check_Button *)o)->value();
+}
+
 void ImpressionistUI::cb_apply_filter(Fl_Widget* o, void* v) {
 	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
 	ImpressionistDoc * pDoc = pUI->getDocument();
-	pDoc->applyKernel(pUI->filterRow, pUI->filterCol, pUI->filterValue);
+	pDoc->applyKernel(pUI->filterRow, pUI->filterCol, pUI->filterValue, pUI->normalizeFilter);
 }
 
 
 void ImpressionistUI::cb_convolution(Fl_Widget* o, void* v) {
 	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
 	ImpressionistDoc * pDoc = pUI->getDocument();
-	pDoc->applyKernel(pUI->filterRow, pUI->filterCol, pUI->filterValue);
+	pDoc->applyKernel(pUI->filterRow, pUI->filterCol, pUI->filterValue, pUI->normalizeFilter);
 	pDoc->autoPaint();
 }
 
@@ -493,7 +498,6 @@ void ImpressionistUI::deleteFilterInput() {
 	filterValueInput = NULL;
 	filterValue = NULL;	
 	filterDialog->redraw();
-	printf("filter clear\n");
 }
 
 //------------------------------------------------
@@ -739,14 +743,20 @@ ImpressionistUI::ImpressionistUI() {
 		initFilterButton->user_data((void*)(this));
 		initFilterButton->callback(cb_init_filter);
 
-		filterValueInput = NULL;
+		normalizeFilterCheckBox = new Fl_Check_Button(10, 280, 100, 25, "&Normalize");
+		normalizeFilterCheckBox->user_data((void*)(this));
+		normalizeFilterCheckBox->value(TRUE);
+		normalizeFilterCheckBox->callback(cb_normalize_checkbox);
 
-		applyFilterButton = new Fl_Button(50, 280, 100, 25, "&Apply As Brush");
+		filterValueInput = NULL;
+		normalizeFilter = true;
+
+		applyFilterButton = new Fl_Button(100, 280, 100, 25, "&Apply As Brush");
 		applyFilterButton->user_data((void*)(this));
 		applyFilterButton->callback(cb_apply_filter);
 		applyFilterButton->deactivate();
 
-		applyConvolutionButton = new Fl_Button(175, 280, 125, 25, "&Apply Convolution");
+		applyConvolutionButton = new Fl_Button(225, 280, 125, 25, "&Apply Convolution");
 		applyConvolutionButton->user_data((void*)(this));
 		applyConvolutionButton->callback(cb_convolution);
 		applyConvolutionButton->deactivate();

@@ -44,7 +44,7 @@ public:
 	void	normalizeKernel();
 	void	blurringKernel();
 	void	sharpeningKernel();
-	void	applyKernel(int row, int col, int** filter);
+	void	applyKernel(int row, int col, int** filter, bool normalize = TRUE);
 	
 
 // Attributes

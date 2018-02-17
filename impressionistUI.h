@@ -11,13 +11,14 @@
 #include <FL/Fl_Window.H>
 #include <FL/fl_file_chooser.H>		// FLTK file chooser
 #include <FL/Fl_Color_Chooser.H>
-#include <FL/Fl_Int_Input.H>
 
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Value_Slider.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Light_Button.H>
+#include <FL/Fl_Check_Button.H>
+#include <FL/Fl_Int_Input.H>
 
 #include "Impressionist.h"
 #include "OriginalView.h"
@@ -71,6 +72,7 @@ public:
 	Fl_Int_Input***		filterValueInput;//2D pointers
 	Fl_Button*			applyFilterButton;
 	Fl_Button*			applyConvolutionButton;
+	Fl_Check_Button*	normalizeFilterCheckBox;
 
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
@@ -100,6 +102,7 @@ private:
 	float	m_alpha;
 	int		filterRow;	//it is the number of int input box, the filter size that using should be found in Doc
 	int		filterCol;
+	bool	normalizeFilter; //default true
 	int**	filterValue;//2D array
 
 	// Static class members
@@ -136,6 +139,7 @@ private:
 	static void cb_filterColInput(Fl_Widget* o, void* v);
 	static void cb_init_filter(Fl_Widget* o, void* v);
 	static void cb_update_filter(Fl_Widget* o, void* v);
+	static void cb_normalize_checkbox(Fl_Widget* o, void* v);
 	static void cb_apply_filter(Fl_Widget* o, void* v);
 	static void cb_convolution(Fl_Widget* o, void* v);
 
