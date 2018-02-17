@@ -58,3 +58,7 @@ void ImpBrush::SetColor (const Point source)
 	GLubyte alphaByte = (byte)static_cast<unsigned int>(pDoc->getAlpha() * 255);
 	glColor4ub(color[0], color[1], color[2], alphaByte);
 }
+
+float ImpBrush::GetColorValue(const GLubyte color[3]) {
+	return ((float)color[0] / 255.0 + (float)color[1] / 255.0 + (float)color[2] / 255.0) / 3.0;
+}

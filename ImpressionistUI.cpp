@@ -243,6 +243,13 @@ void ImpressionistUI::cb_undo_button(Fl_Widget * o, void * v)
 
 	pDoc->undo();
 }
+
+void ImpressionistUI::cb_edge_clipping_checkBox(Fl_Widget * o, void * v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	pDoc->edgeClippingBool = ((Fl_Check_Button *)o)->value();
+}
+
 //-------------------------------------------------------------
 // Brings up the paint dialog
 // This is called by the UI when the brushes menu item
@@ -289,7 +296,6 @@ void ImpressionistUI::cb_sharpen_filter_button(Fl_Widget* o, void* v)
 
 void ImpressionistUI::cb_customize_filter_button(Fl_Widget* o, void* v)
 {
-	//ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
 	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
 	pUI->filterDialog->show();
 }
@@ -303,7 +309,6 @@ void ImpressionistUI::cb_about(Fl_Menu_* o, void* v)
 	fl_message("Impressionist FLTK version for CS341, Spring 2002");
 }
 
-
 void ImpressionistUI::cb_load_another_image(Fl_Menu_ * o, void *)
 {
 	ImpressionistDoc *pDoc = whoami(o)->getDocument();
@@ -311,6 +316,16 @@ void ImpressionistUI::cb_load_another_image(Fl_Menu_ * o, void *)
 	char* newfile = fl_file_chooser("Open File?", "*.bmp", pDoc->getImageName());
 	if (newfile != NULL) {
 		pDoc->loadAnotherImage(newfile);
+	}
+}
+
+void ImpressionistUI::cb_load_edge_image(Fl_Menu_ * o, void *)
+{
+	ImpressionistDoc *pDoc = whoami(o)->getDocument();
+
+	char* newfile = fl_file_chooser("Open File?", "*.bmp", pDoc->getImageName());
+	if (newfile != NULL) {
+		pDoc->loadEdgeImage(newfile);
 	}
 }
 
@@ -334,10 +349,12 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 		pUI->m_BrushLineWidthSlider->activate();
 		pUI->m_BrushLineAngleSlider->activate();
 		pUI->m_AnotherGradientButton->activate();
+		pUI->edgeClippingButton->activate();
 	}else{
 		pUI->m_BrushDirectionChoice->deactivate();
 		pUI->m_BrushLineWidthSlider->deactivate();
 		pUI->m_BrushLineAngleSlider->deactivate(); 
+		pUI->edgeClippingButton->deactivate();
 	}
 	if (type == 7) {
 		pUI->m_FilterBlurButton->activate();
@@ -612,7 +629,8 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes },
 		{ "&Color...",	FL_ALT + 'o', (Fl_Callback *)ImpressionistUI::cb_pick_color },
 		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
-		{ "&Load another Image", FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_load_another_image, 0, FL_MENU_DIVIDER },
+		{ "&Load Another Image", FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_load_another_image },
+		{ "&Load Edge Image", FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_load_edge_image, 0, FL_MENU_DIVIDER },
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
 		{ 0 },
 
@@ -783,6 +801,12 @@ ImpressionistUI::ImpressionistUI() {
 		m_AnotherGradientButton->deactivate();
 		anotherGradientButtonBool = false;
 
+		edgeClippingButton = new Fl_Check_Button(280, 230, 125, 25, "&Edge Clipping");
+		edgeClippingButton->user_data((void*)(this));
+		edgeClippingButton->value(true);
+		edgeClippingButton->callback(cb_edge_clipping_checkBox);
+		edgeClippingButton->deactivate();
+
 		m_AutoPaintButton = new Fl_Button(280, 40, 60, 25, "&Undo");
 		m_AutoPaintButton->user_data((void*)(this));
 		m_AutoPaintButton->callback(cb_undo_button);
@@ -807,7 +831,7 @@ ImpressionistUI::ImpressionistUI() {
 
 		normalizeFilterCheckBox = new Fl_Check_Button(10, 280, 100, 25, "&Normalize");
 		normalizeFilterCheckBox->user_data((void*)(this));
-		normalizeFilterCheckBox->value(TRUE);
+		normalizeFilterCheckBox->value(true);
 		normalizeFilterCheckBox->callback(cb_normalize_checkbox);
 
 		filterValueInput = NULL;

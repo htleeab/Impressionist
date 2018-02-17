@@ -36,8 +36,9 @@ ImpressionistDoc::ImpressionistDoc()
 	m_ucBitmap		= NULL;
 	m_ucPainting	= NULL;
 	m_ucAnotherImage = NULL;
+	m_ucEdgeImage	= NULL;
+	m_ucUndoBuffer	= NULL;
 	brushBitmap		= NULL;
-	m_ucUndoBuffer = NULL;
 	filterKernel	= NULL;
 
 	// create one instance of each brush
@@ -71,6 +72,8 @@ ImpressionistDoc::ImpressionistDoc()
 	colorPicked = false;
 
 	useAnotherGradientBool = false;
+
+	edgeClippingBool = true;
 }
 
 
@@ -378,6 +381,33 @@ int ImpressionistDoc::loadAnotherImage(char * iname)
 	return 1;
 }
 
+int ImpressionistDoc::loadEdgeImage(char * iname)
+{
+	// try to open the image to read
+	unsigned char*	data;
+	int				width,height;
+
+	if ((data = readBMP(iname, width, height)) == NULL)
+	{
+		fl_alert("Can't load bitmap file");
+		return 0;
+	}
+
+	// check dimension
+	if (m_nWidth != width || m_nHeight != height) {
+		fl_alert("Different Dimension!");
+		delete[] data;
+		return 0;
+	}
+
+	// release old storage
+	if (m_ucEdgeImage) delete[] m_ucEdgeImage;
+
+	m_ucEdgeImage = data;
+
+	return 1;
+}
+
 int ImpressionistDoc::loadBrushBitmap(char * iname)
 {
 	// try to open the image to read
@@ -412,7 +442,6 @@ int ImpressionistDoc::loadBrushBitmap(char * iname)
 		for (int j = 0; j < width; j++) {
 			memcpy(color, data + 3 * (j*width + i),3);
 			brushBitmap[i][j] = ((float)color[0] / 255.0 + (float)color[1] / 255.0 + (float)color[2]/255.0) / 3.0;
-			//printf("color (%x,%x,%x)\tcolor (%f,%f,%f)\talpha: (%f)\n", color[0], color[1], color[2], (float)color[0] / 255.0, color[1] / 255.0, color[2] / 255.0, brushBitmap[i][j]);
 		}
 	}
 	
@@ -469,21 +498,6 @@ GLubyte* ImpressionistDoc::GetOriginalPixel( const Point p )
 	return GetOriginalPixel( p.x, p.y );
 }
 
-GLubyte* ImpressionistDoc::GetBitmapPixel(int x, int y)
-{
-	if (x < 0)
-		x = 0;
-	else if (x >= brushBitmapWidth)
-		x = m_nWidth - 1;
-
-	if (y < 0)
-		y = 0;
-	else if (y >= brushBitmapHeight)
-		y = brushBitmapHeight - 1;
-
-	return (GLubyte*)(brushBitmap + 3 * (y*brushBitmapWidth + x));
-}
-
 void ImpressionistDoc::autoPaint()
 {
 	m_pUI->m_paintView->autoPaint();
@@ -517,3 +531,24 @@ GLubyte* ImpressionistDoc::GetAnotherImagePixel(int x, int y)
 	return (GLubyte*)(m_ucAnotherImage + 3 * (y*m_nWidth + x));
 }
 
+GLubyte * ImpressionistDoc::GetEdgeImagePixel(int x, int y)
+{
+	return GetTargetImagePixel(x, y, m_ucEdgeImage);
+}
+
+/*assume the size is same to original image*/
+GLubyte * ImpressionistDoc::GetTargetImagePixel(int x, int y, unsigned char* image)
+{
+
+	if (x < 0)
+		x = 0;
+	else if (x >= m_nWidth)
+		x = m_nWidth - 1;
+
+	if (y < 0)
+		y = 0;
+	else if (y >= m_nHeight)
+		y = m_nHeight - 1;
+
+	return (GLubyte*)(image + 3 * (y*m_nWidth + x));
+}
