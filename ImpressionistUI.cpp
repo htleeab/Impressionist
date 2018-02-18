@@ -339,6 +339,12 @@ void ImpressionistUI::cb_load_edge_image(Fl_Menu_ * o, void *)
 	}
 }
 
+void ImpressionistUI::cb_generate_edge_image(Fl_Menu_ * o, void *)
+{
+	ImpressionistDoc *pDoc = whoami(o)->getDocument();
+	pDoc->generateEdgeImage();
+}
+
 void ImpressionistUI::cb_display_original(Fl_Menu_ * o, void *)
 {
 	ImpressionistUI* pUI = whoami(o);
@@ -359,7 +365,11 @@ void ImpressionistUI::cb_display_edge(Fl_Menu_ * o, void *)
 {
 	ImpressionistUI* pUI = whoami(o);
 	ImpressionistDoc *pDoc = pUI->getDocument();
+	if (!pDoc->m_ucEdgeImage) {//haven't edge image yet
+		pDoc->generateEdgeImage();
+	}
 	pDoc->displayMode = EDGE_IMAGE;
+	
 	pUI->m_origView->refresh();
 }
 
@@ -665,7 +675,8 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Color...",	FL_ALT + 'o', (Fl_Callback *)ImpressionistUI::cb_pick_color },
 		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
 		{ "&Load Another Image", FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_load_another_image },
-		{ "&Load Edge Image", FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_load_edge_image, 0, FL_MENU_DIVIDER },
+		{ "&Load Edge Image", FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_load_edge_image },
+		{ "&Generate Edge Image", FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_generate_edge_image, 0, FL_MENU_DIVIDER },
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
 		{ 0 },
 	
@@ -844,7 +855,7 @@ ImpressionistUI::ImpressionistUI() {
 
 		edgeClippingButton = new Fl_Check_Button(280, 230, 125, 25, "&Edge Clipping");
 		edgeClippingButton->user_data((void*)(this));
-		edgeClippingButton->value(false);
+		edgeClippingButton->value(true);
 		edgeClippingButton->callback(cb_edge_clipping_checkBox);
 		edgeClippingButton->deactivate();
 

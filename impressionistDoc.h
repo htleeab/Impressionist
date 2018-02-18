@@ -29,8 +29,8 @@ public:
 
 	int     clearCanvas();                  // called by the UI to clear the drawing canvas
 	void	setBrushType(int type);			// called by the UI to set the brushType
-	int		getSize();						// get the UI size
-	void	setSize(int size);				// set the UI size
+	int		getSize();						// get brush size from UI 
+	void	setSize(int size);				// set brush size 
 	int		getWidth();
 	int		getAngle();
 	int		getBrushDirection();
@@ -42,8 +42,8 @@ public:
 	void	useAnotherGradient(bool v);
 
 	void	autoPaint();
-
 	void	applyConvolution();
+	unsigned char* generateEdgeImage();
 
 	//for undo
 	void	saveUndobuffer();
