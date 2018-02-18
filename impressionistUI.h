@@ -131,6 +131,11 @@ private:
 	static void	cb_about(Fl_Menu_* o, void* v);
 	static void cb_load_another_image(Fl_Menu_* o, void*);
 	static void cb_load_edge_image(Fl_Menu_ * o, void *);
+
+	static void cb_display_original(Fl_Menu_* o, void*);
+	static void cb_display_another(Fl_Menu_* o, void*);
+	static void cb_display_edge(Fl_Menu_* o, void*);
+
 	static void	cb_brushChoice(Fl_Widget* o, void* v);
 	static void	cb_brushDirectionChoice(Fl_Widget* o, void* v);
 	static void	cb_clear_canvas_button(Fl_Widget* o, void* v);
@@ -156,7 +161,6 @@ private:
 	static void cb_apply_filter(Fl_Widget* o, void* v);
 	static void cb_convolution(Fl_Widget* o, void* v);
 	static void cb_load_brush_bitmap(Fl_Widget* o, void* v);
-
 };
 
 #endif

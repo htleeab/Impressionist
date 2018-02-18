@@ -339,6 +339,30 @@ void ImpressionistUI::cb_load_edge_image(Fl_Menu_ * o, void *)
 	}
 }
 
+void ImpressionistUI::cb_display_original(Fl_Menu_ * o, void *)
+{
+	ImpressionistUI* pUI = whoami(o);
+	ImpressionistDoc *pDoc = pUI->getDocument();
+	pDoc->displayMode = ORIGINAL_IMAGE;
+	pUI->m_origView->refresh();
+}
+
+void ImpressionistUI::cb_display_another(Fl_Menu_ * o, void *)
+{
+	ImpressionistUI* pUI = whoami(o);
+	ImpressionistDoc *pDoc = pUI->getDocument();
+	pDoc->displayMode = ANOTHER_IMAGE;
+	pUI->m_origView->refresh();
+}
+
+void ImpressionistUI::cb_display_edge(Fl_Menu_ * o, void *)
+{
+	ImpressionistUI* pUI = whoami(o);
+	ImpressionistDoc *pDoc = pUI->getDocument();
+	pDoc->displayMode = EDGE_IMAGE;
+	pUI->m_origView->refresh();
+}
+
 //------- UI should keep track of the current for all the controls for answering the query from Doc ---------
 //-------------------------------------------------------------
 // Sets the type of brush to use to the one chosen in the brush 
@@ -643,6 +667,12 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Load Another Image", FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_load_another_image },
 		{ "&Load Edge Image", FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_load_edge_image, 0, FL_MENU_DIVIDER },
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
+		{ 0 },
+	
+	{ "&Display",		0, 0, 0, FL_SUBMENU },
+		{ "&Original Image",	FL_ALT + 'd', (Fl_Callback *)ImpressionistUI::cb_display_original },
+		{ "&Another Image",	FL_ALT + 'd', (Fl_Callback *)ImpressionistUI::cb_display_another },
+		{ "&Edge Image",	FL_ALT + 'd', (Fl_Callback *)ImpressionistUI::cb_display_edge },
 		{ 0 },
 
 	{ "&Help",		0, 0, 0, FL_SUBMENU },

@@ -18,6 +18,13 @@
 
 #include "ImpBrush.h"
 
+enum
+{
+	ORIGINAL_IMAGE = 0,
+	ANOTHER_IMAGE,
+	EDGE_IMAGE
+};
+
 class ImpressionistDoc;
 
 class OriginalView : public Fl_Gl_Window

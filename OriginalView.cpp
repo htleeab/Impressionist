@@ -68,8 +68,9 @@ void OriginalView::draw()
 		if ( startrow < 0 ) 
 			startrow = 0;
 
-
-		bitstart = m_pDoc->m_ucBitmap + 3 * ((m_pDoc->m_nWidth * startrow) + scrollpos.x);
+		unsigned char* displayImage = m_pDoc->m_ucBitmap;
+		displayImage = m_pDoc->currentDisplay();
+		bitstart = displayImage + 3 * ((m_pDoc->m_nWidth * startrow) + scrollpos.x);
 
 		// just copy image to GLwindow conceptually
 		glRasterPos2i( 0, m_nWindowHeight - drawHeight );
