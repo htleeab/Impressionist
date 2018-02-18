@@ -197,6 +197,16 @@ void ImpressionistUI::cb_save_image(Fl_Menu_* o, void* v)
 	}
 }
 
+void ImpressionistUI::cb_change_mural_image(Fl_Menu_ * o, void * v)
+{
+	ImpressionistDoc *pDoc = whoami(o)->getDocument();
+
+	char* newfile = fl_file_chooser("Open File?", "*.bmp", pDoc->getImageName());
+	if (newfile != NULL) {
+		pDoc->changeMuralImage(newfile);
+	}
+}
+
 void ImpressionistUI::cb_swap_image(Fl_Menu_* o, void* v)
 {
 	ImpressionistDoc *pDoc = whoami(o)->getDocument();
@@ -625,6 +635,7 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 	{ "&File",		0, 0, 0, FL_SUBMENU },
 		{ "&Load Image...",	FL_ALT + 'l', (Fl_Callback *)ImpressionistUI::cb_load_image },
 		{ "&Save Image...",	FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_save_image },
+		{ "&Change Mural Image...",	FL_ALT + 'm', (Fl_Callback *)ImpressionistUI::cb_change_mural_image },
 		{ "&Swap Images",	FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_swap_image ,0, FL_MENU_DIVIDER },
 		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes },
 		{ "&Color...",	FL_ALT + 'o', (Fl_Callback *)ImpressionistUI::cb_pick_color },
@@ -803,7 +814,7 @@ ImpressionistUI::ImpressionistUI() {
 
 		edgeClippingButton = new Fl_Check_Button(280, 230, 125, 25, "&Edge Clipping");
 		edgeClippingButton->user_data((void*)(this));
-		edgeClippingButton->value(true);
+		edgeClippingButton->value(false);
 		edgeClippingButton->callback(cb_edge_clipping_checkBox);
 		edgeClippingButton->deactivate();
 
