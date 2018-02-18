@@ -122,6 +122,7 @@ private:
 	// static
 	static void	cb_load_image(Fl_Menu_* o, void* v);
 	static void	cb_save_image(Fl_Menu_* o, void* v);
+	static void cb_change_mural_image(Fl_Menu_* o, void* v);
 	static void	cb_swap_image(Fl_Menu_* o, void* v);
 	static void	cb_brushes(Fl_Menu_* o, void* v);
 	static void	cb_pick_color(Fl_Menu_* o, void* v);
