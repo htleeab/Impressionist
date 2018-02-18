@@ -49,8 +49,8 @@ void LineBrush::BrushMove(const Point source, const Point target)
 		}
 	}	
 
-	glVertex2d(target.x - len1 / 2 * cos(angle), target.y - len1 / 2 * sin(angle));
-	glVertex2d(target.x + len2 / 2 * cos(angle), target.y + len2 / 2 * sin(angle));
+	glVertex2d(target.x - len1 / 2.0 * cos(angle), target.y - len1 / 2.0 * sin(angle));
+	glVertex2d(target.x + len2 / 2.0 * cos(angle), target.y + len2 / 2.0 * sin(angle));
 
 	glEnd();
 }
@@ -59,16 +59,16 @@ void LineBrush::findEdgePoint(const Point center, const int size, const float an
 	ImpressionistDoc* pDoc = GetDocument();
 	GLubyte color[3];
 
-	for (len1=0;len1<=size/2;len1++){
+	for (len1=0;len1<=size;len1++){
 		memcpy(color, pDoc->GetTargetImagePixel((int)(center.x - len1 / 2.0 * cos(angle)), (int)(center.y - len1/ 2.0 * sin(angle)),edgeImage), 3);
 		if (GetColorValue(color) > 0.9) {//=color = white = on edge
 			len1--;
 			break;
-		}
+		}		
 	}
 
-	for (len2 = 0; len2 <= size/2; len2++) {
-		memcpy(color, pDoc->GetTargetImagePixel((int)center.x + len2 / 2 * cos(angle), (int)center.y + len2 / 2 * sin(angle), edgeImage), 3);
+	for (len2 = 0; len2 <= size; len2++) {
+		memcpy(color, pDoc->GetTargetImagePixel((int)center.x + len2 / 2.0 * cos(angle), (int)center.y + len2 / 2.0 * sin(angle), edgeImage), 3);
 		if (GetColorValue(color) > 0.9) {//=color = white = on edge
 			len2--;
 			break;

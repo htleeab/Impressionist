@@ -73,7 +73,7 @@ ImpressionistDoc::ImpressionistDoc()
 
 	useAnotherGradientBool = false;
 
-	edgeClippingBool = false;
+	edgeClippingBool = true;
 
 	displayMode = ORIGINAL_IMAGE;
 }
@@ -178,7 +178,7 @@ void ImpressionistDoc::setGradientDirection(const Point source) {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j <  3; j++) {
 			GLubyte color[3] = {0,0,0};
-			if (m_ucAnotherImage&&useAnotherGradientBool) {
+			if (m_ucAnotherImage && useAnotherGradientBool) {
 				memcpy(color, GetAnotherImagePixel(source.x + i - 1, source.y + j - 1), 3);
 			}
 			else {
@@ -318,6 +318,13 @@ int ImpressionistDoc::loadImage(char *iname)
 								width*2, 
 								height+25);
 
+	//delete other related image
+	if (m_ucEdgeImage) delete[] m_ucEdgeImage;
+	m_ucEdgeImage = NULL;
+	if (m_ucAnotherImage) delete[] m_ucAnotherImage;
+	m_ucAnotherImage = NULL;
+	displayMode = ORIGINAL_IMAGE;
+
 	// display it on origView
 	m_pUI->m_origView->resizeWindow(width, height);	
 	m_pUI->m_origView->refresh();
@@ -325,7 +332,6 @@ int ImpressionistDoc::loadImage(char *iname)
 	// refresh paint view as well
 	m_pUI->m_paintView->resizeWindow(width, height);	
 	m_pUI->m_paintView->refresh();
-
 
 	return 1;
 }
@@ -436,7 +442,6 @@ int ImpressionistDoc::loadEdgeImage(char * iname)
 
 	// release old storage
 	if (m_ucEdgeImage) delete[] m_ucEdgeImage;
-
 	m_ucEdgeImage = data;
 
 	return 1;
@@ -550,6 +555,54 @@ void ImpressionistDoc::applyConvolution() {
 	}
 	m_pUI->m_paintView->SaveCurrentContent();
 	m_pUI->m_paintView->RestoreContent();
+}
+
+unsigned char * ImpressionistDoc::generateEdgeImage()
+{
+	unsigned char* generatedEdgeImage = new unsigned char[3 * m_nWidth*m_nHeight];
+	
+	//generatedEdgeImage = new unsigned char[3 * m_nWidth*m_nHeight];
+	float threshold = 0.7;
+	int sobelX[3][3] = { { -1,0,1 },{ -2,0,2 } ,{ -1,0,1 } };
+	int sobelY[3][3] = { { 1,2,1 },{ 0,0,0 } ,{ -1,-2,-1 } };
+	GLfloat grayscale[3][3];
+	Point source(0, 0);
+	float gradientValue;
+	for (source.x = 0; source.x < m_nWidth; source.x++) {
+		for (source.y = 0; source.y < m_nHeight; source.y++) {
+			for (int i = 0; i < 3; i++) {//x of kernel
+				for (int j = 0; j < 3; j++) {//y of kernel
+					GLubyte color[3] = { 0,0,0 };
+					memcpy(color, GetOriginalPixel(source.x + i - 1, source.y + j - 1), 3);
+					grayscale[i][j] = (static_cast<GLfloat>(color[0]) / 255 + static_cast<GLfloat>(color[1]) / 255 + static_cast<GLfloat>(color[2]) / 255) / 3;
+				}
+			}
+			float sobelXValue = 0;
+			float sobelYValue = 0;
+			// apply sobel kernel
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 3; j++) {
+					sobelXValue += grayscale[i][j] * sobelX[i][j];
+					sobelYValue += grayscale[i][j] * sobelY[i][j];
+				}
+			}
+			gradientValue = sqrt(sobelYValue *sobelYValue + sobelXValue*sobelXValue);
+			GLubyte bitmapByte;
+			if (gradientValue > threshold) {
+				bitmapByte = (unsigned char)255;
+			}
+			else {
+				bitmapByte = (unsigned char)0;
+			}
+			generatedEdgeImage[3 * (source.y*m_nWidth + source.x)] = bitmapByte;
+			generatedEdgeImage[3 * (source.y*m_nWidth + source.x) + 1] = bitmapByte;
+			generatedEdgeImage[3 * (source.y*m_nWidth + source.x) + 2] = bitmapByte;
+		}
+	}
+	if (m_ucEdgeImage) delete[] m_ucEdgeImage;
+	m_ucEdgeImage = generatedEdgeImage;
+	m_pUI->m_origView->refresh();
+	return m_ucEdgeImage;
 }
 
 
