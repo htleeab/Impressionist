@@ -538,6 +538,21 @@ void ImpressionistDoc::autoPaint()
 
 }
 
+void ImpressionistDoc::applyConvolution() {
+	Point target(0, 0);
+	setSize(2);
+	for (int i = 0; i < m_nWidth;i++) {
+		for (int j = 0; j < m_nHeight; j++) {
+			target.x = i; target.y = j;
+			m_pCurrentBrush->BrushBegin(target, target);
+			m_pCurrentBrush->BrushEnd(target, target);
+		}
+	}
+	m_pUI->m_paintView->SaveCurrentContent();
+	m_pUI->m_paintView->RestoreContent();
+}
+
+
 void ImpressionistDoc::saveUndobuffer()
 {
 	if (!m_ucUndoBuffer) m_ucUndoBuffer = new unsigned char[3 * m_nWidth*m_nHeight];

@@ -22,6 +22,7 @@
 #define RIGHT_MOUSE_DRAG	5
 #define RIGHT_MOUSE_UP		6
 #define AUTO_PAINT			7
+#define CONVOLUTION			8
 
 
 #ifndef WIN32
@@ -117,16 +118,15 @@ void PaintView::draw()
 		{
 		case LEFT_MOUSE_DOWN:
 			m_pDoc->updateBrushDirection(source, target, true);
-			if (isInRange(target)) {// 1.2 cut out of range
+			if (isInRange(target)) {
 				m_pDoc->m_pCurrentBrush->BrushBegin(source, target);
 				m_pDoc->saveUndobuffer();
 			}
 			break;
 		case LEFT_MOUSE_DRAG:
 			m_pDoc->updateBrushDirection(source, target);
-			if (isInRange(target))// 1.2 cut out of range
+			if (isInRange(target))
 				m_pDoc->m_pCurrentBrush->BrushMove( source, target );
-			//printf("(x,y): %i,%i", target.x, target.y);
 			break;
 		case LEFT_MOUSE_UP:
 			m_pDoc->updateBrushDirection(source, target);
@@ -146,6 +146,10 @@ void PaintView::draw()
 
 		case AUTO_PAINT:
 			autoPaintDetails();
+			break;
+
+		case CONVOLUTION:
+			m_pDoc->applyConvolution();
 			break;
 
 		default:
@@ -307,9 +311,13 @@ void PaintView::autoPaint()
 	isAnEvent = 1;
 	eventToDo = AUTO_PAINT;
 	refresh();
-
 }
 
+void PaintView::convolution() {
+	isAnEvent = 1;
+	eventToDo = CONVOLUTION;
+	refresh();
+}
 
 
 // Get line from right click

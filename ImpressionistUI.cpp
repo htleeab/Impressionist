@@ -525,7 +525,7 @@ void ImpressionistUI::cb_convolution(Fl_Widget* o, void* v) {
 	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
 	ImpressionistDoc * pDoc = pUI->getDocument();
 	pDoc->applyKernel(pUI->filterRow, pUI->filterCol, pUI->filterValue, pUI->normalizeFilter);
-	pDoc->autoPaint();
+	pUI->m_paintView->convolution();
 }
 
 void ImpressionistUI::cb_load_brush_bitmap(Fl_Widget* o, void* v) 
