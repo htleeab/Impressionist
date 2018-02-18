@@ -5,7 +5,8 @@
 [Rr]eleases/
 
 #User-specific files
+impressionist.VC.db
 *.VC.opendb
 *.VC.db
-impressionist.VC.db
 *.suo
+.vs/impressionist/v14/.suo

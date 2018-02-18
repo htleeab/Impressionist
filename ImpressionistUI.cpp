@@ -462,7 +462,7 @@ void ImpressionistUI::cb_init_filter(Fl_Widget* o, void* v) {
 			pUI->filterValue[i] = new int[col];
 			for (int j = 0; j < col; j++) {
 				pUI->filterValue[i][j] = 1;
-				pUI->filterValueInput[i][j]=new Fl_Int_Input(30+300/col*j, 50+200/row*i, 20, 20,"");
+				pUI->filterValueInput[i][j] = new Fl_Int_Input(30 + 300 / row * ( i ), 30 + 200 / col * (col-j), 20, 20, "");
 				filterValueUserData* value_data = new filterValueUserData(pUI,i, j);
 				pUI->filterValueInput[i][j]->user_data(value_data); 
 				pUI->filterValueInput[i][j]->value("1");
@@ -828,11 +828,11 @@ ImpressionistUI::ImpressionistUI() {
 
 	filterDialog = new Fl_Window(350, 350, "Filter Kernel");
 	
-		filterRowInput = new Fl_Int_Input(40, 20, 25, 25, "&Row");
+		filterRowInput = new Fl_Int_Input(40, 20, 25, 25, "&X");
 		filterRowInput->user_data((void*)(this));
 		filterRowInput->callback(cb_filterRowInput);
 
-		filterColInput = new Fl_Int_Input(120, 20, 25, 25, "&Col");
+		filterColInput = new Fl_Int_Input(120, 20, 25, 25, "&Y");
 		filterColInput->user_data((void*)(this));
 		filterColInput->callback(cb_filterColInput);
 
