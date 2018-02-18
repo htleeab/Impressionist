@@ -21,6 +21,7 @@ public:
 
 	int		loadImage(char *iname);			// called by the UI to load image
 	int		saveImage(char *iname);			// called by the UI to save image
+	int		changeMuralImage(char *iname);
 	int		swapImage();
 	int		loadAnotherImage(char *iname);
 	int		loadEdgeImage(char* iname);

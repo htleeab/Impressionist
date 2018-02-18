@@ -73,7 +73,7 @@ ImpressionistDoc::ImpressionistDoc()
 
 	useAnotherGradientBool = false;
 
-	edgeClippingBool = true;
+	edgeClippingBool = false;
 }
 
 
@@ -338,6 +338,38 @@ int ImpressionistDoc::saveImage(char *iname)
 {
 
 	writeBMP(iname, m_nPaintWidth, m_nPaintHeight, m_ucPainting);
+
+	return 1;
+}
+
+int ImpressionistDoc::changeMuralImage(char * iname)
+{
+	// try to open the image to read
+	unsigned char*	data;
+	int				width,
+		height;
+
+	if ((data = readBMP(iname, width, height)) == NULL)
+	{
+		fl_alert("Can't load bitmap file");
+		return 0;
+	}
+
+	// check dimension
+	if (m_nWidth != width || m_nHeight != height) {
+		fl_alert("Different Dimension!");
+		delete[] data;
+		return 0;
+	}
+
+	// release old storage
+	if (m_ucBitmap) delete[] m_ucBitmap;
+
+	m_ucBitmap = data;
+
+
+	// display it on origView
+	m_pUI->m_origView->refresh();
 
 	return 1;
 }
