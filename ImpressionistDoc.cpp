@@ -74,6 +74,8 @@ ImpressionistDoc::ImpressionistDoc()
 	useAnotherGradientBool = false;
 
 	edgeClippingBool = false;
+
+	displayMode = ORIGINAL_IMAGE;
 }
 
 
@@ -583,4 +585,24 @@ GLubyte * ImpressionistDoc::GetTargetImagePixel(int x, int y, unsigned char* ima
 		y = m_nHeight - 1;
 
 	return (GLubyte*)(image + 3 * (y*m_nWidth + x));
+}
+
+unsigned char * ImpressionistDoc::currentDisplay()
+{
+	switch (displayMode){
+		case ORIGINAL_IMAGE:
+			if (m_ucBitmap)
+				return m_ucBitmap;
+			break;
+		case ANOTHER_IMAGE:
+			if (m_ucAnotherImage)
+				return m_ucAnotherImage;
+			break;
+		case EDGE_IMAGE:
+			if (m_ucEdgeImage)
+				return m_ucEdgeImage;
+			break;
+	}
+
+	return m_ucBitmap;
 }

@@ -70,6 +70,7 @@ public:
 	unsigned char*	m_ucAnotherImage;
 	unsigned char*	m_ucEdgeImage;
 	float**			brushBitmap;
+	unsigned int	displayMode;
 
 	unsigned char*	m_ucUndoBuffer;
 
@@ -107,6 +108,7 @@ public:
 	// Get the color of the edge picture at the specified point
 	GLubyte* GetEdgeImagePixel(int x, int y);
 	GLubyte * GetTargetImagePixel(int x, int y, unsigned char * image);
+	unsigned char*	currentDisplay();
 
 
 private:
