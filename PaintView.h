@@ -34,6 +34,8 @@ public:
 
 	void autoPaint();
 
+	void convolution();
+
 	ImpressionistDoc *m_pDoc;
 
 private:

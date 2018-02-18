@@ -43,6 +43,8 @@ public:
 
 	void	autoPaint();
 
+	void	applyConvolution();
+
 	//for undo
 	void	saveUndobuffer();
 	void	undo();
