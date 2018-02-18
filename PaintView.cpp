@@ -126,6 +126,7 @@ void PaintView::draw()
 			m_pDoc->updateBrushDirection(source, target);
 			if (isInRange(target))// 1.2 cut out of range
 				m_pDoc->m_pCurrentBrush->BrushMove( source, target );
+			//printf("(x,y): %i,%i", target.x, target.y);
 			break;
 		case LEFT_MOUSE_UP:
 			m_pDoc->updateBrushDirection(source, target);
