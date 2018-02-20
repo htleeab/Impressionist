@@ -44,7 +44,7 @@ Here is a list of suggestions for extending the program. You are encouraged to c
 - [x] [bell] Add an undo feature with at least one level of undo so that you can try a brush and decide to undo its effect on the canvas. This comes in very handy for experimenting with brush and filtering effects.
 
 
-- [ ] [bell] Add the ability to dissolve one image into another.
+- [x] [bell] Add the ability to dissolve one image into another.
 
 
 - [ ] [bell+whistle] A different solution to the problem of not being able to see where you're painting is to show a dimmed version of the painting on the canvas. Add a slider that allows the user to fade in or fade out the original image beneath the user's brush strokes on the canvas. (Beware, this bell and whistle is more difficult than it looks).
@@ -68,7 +68,7 @@ Here is a list of suggestions for extending the program. You are encouraged to c
 - [x] [bell][bell] Construct a filter kernel design interface so that you can enter the weights of filters of arbitrary sizes. Provide an "apply" button that will cause the convolution to happen. Include a "normalize" checkbox that will automatically divide by the sum of the weights when the user wishes it.
 
 
-- [ ] [bell][bell] Use the image processing techniques described in class to automatically find the edges in the base image. Once you have found the edges, add a button to the user interface that will allow the user to select whether or not the brush strokes should be clipped to the edges in the picture.
+- [x] [bell][bell] Use the image processing techniques described in class to automatically find the edges in the base image. Once you have found the edges, add a button to the user interface that will allow the user to select whether or not the brush strokes should be clipped to the edges in the picture.
 
 
 - [ ] [bell][bell] Implement a multiresolution automatic painting technique. See Painterly Styles for Expressive Rendering.

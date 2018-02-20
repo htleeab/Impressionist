@@ -81,6 +81,7 @@ public:
 	Fl_Window*			dissolveDialog;
 	Fl_Slider*			dissolveSlider;
 	Fl_Button*			dissolveButton;
+
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
 	ImpressionistDoc*	getDocument();

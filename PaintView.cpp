@@ -156,6 +156,7 @@ void PaintView::draw()
 		case DISSOLVE:
 			m_pDoc->dissolve();
 			break;
+
 		default:
 			printf("Unknown event!!\n");		
 			break;
@@ -286,7 +287,6 @@ void PaintView::autoPaintDetails()
 		target.x += original_size / 4 + 2;
 		while (target.y < m_nDrawHeight) {
 			target.y += original_size / 4 + 2;
-
 			points_v.push_back(target);
 
 		}

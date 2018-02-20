@@ -282,7 +282,6 @@ void ImpressionistDoc::applyKernel(int row, int col, int ** filter, bool normali
 
 void ImpressionistDoc::dissolve()
 {
-	//TODO
 	if (!m_ucAnotherImage) {
 		fl_alert("Another Image is required.");
 		return;
@@ -306,7 +305,6 @@ void ImpressionistDoc::dissolve()
 	glEnd();
 	m_pUI->m_paintView->SaveCurrentContent();
 	m_pUI->m_paintView->RestoreContent();
-	m_pUI->m_paintView->refresh();
 }
 
 
