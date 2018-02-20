@@ -76,6 +76,8 @@ ImpressionistDoc::ImpressionistDoc()
 	edgeClippingBool = true;
 
 	displayMode = ORIGINAL_IMAGE;
+
+	dissolveFactor = 0.5;
 }
 
 
@@ -276,6 +278,35 @@ void ImpressionistDoc::applyKernel(int row, int col, int ** filter, bool normali
 	}
 	if (normalize)
 		normalizeKernel();
+}
+
+void ImpressionistDoc::dissolve()
+{
+	//TODO
+	if (!m_ucAnotherImage) {
+		fl_alert("Another Image is required.");
+		return;
+	}
+	//just like point brush
+	glPointSize((float)1.0);
+	glDisable(GL_POINT_SMOOTH);
+	Point target(0, 0);
+	glBegin(GL_POINTS);
+		for (int i = 0; i < m_nWidth; i++) {
+			for (int j = 0; j < m_nHeight; j++) {
+				target.x = i; target.y = j;
+				// Find dissolve color
+				GLubyte color[3];
+				memcpy(color, GetTargetImagePixel(target.x, target.y,m_ucAnotherImage), 3);
+				GLubyte alphaByte = (byte)static_cast<unsigned int>(dissolveFactor * 255);
+				glColor4ub(color[0], color[1], color[2], alphaByte);
+				glVertex2i(target.x, target.y);
+			}
+		}
+	glEnd();
+	m_pUI->m_paintView->SaveCurrentContent();
+	m_pUI->m_paintView->RestoreContent();
+	m_pUI->m_paintView->refresh();
 }
 
 

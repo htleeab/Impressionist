@@ -35,6 +35,10 @@ void FilterBrush::BrushMove(const Point source, const Point target)
 	ImpressionistDoc* pDoc = GetDocument();
 	ImpressionistUI* dlg = pDoc->m_pUI;
 
+	glPointSize((float)1.0);
+	glDisable(GL_POINT_SMOOTH);
+	//BrushMove(source, target);
+
 	if (pDoc == NULL) {
 		printf("Filter Brush::BrushMove  document is NULL\n");
 		return;

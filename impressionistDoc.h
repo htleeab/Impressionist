@@ -56,6 +56,7 @@ public:
 	void	blurringKernel();
 	void	sharpeningKernel();
 	void	applyKernel(int row, int col, int** filter, bool normalize = TRUE);
+	void	dissolve();
 	
 
 // Attributes
@@ -85,6 +86,7 @@ public:
 	float			movementAngle;
 	float			gradientAngle;
 	bool			useAnotherGradientBool;
+	float			dissolveFactor;
 
 	bool			edgeClippingBool;
 

@@ -23,6 +23,7 @@
 #define RIGHT_MOUSE_UP		6
 #define AUTO_PAINT			7
 #define CONVOLUTION			8
+#define DISSOLVE			9
 
 
 #ifndef WIN32
@@ -152,6 +153,9 @@ void PaintView::draw()
 			m_pDoc->applyConvolution();
 			break;
 
+		case DISSOLVE:
+			m_pDoc->dissolve();
+			break;
 		default:
 			printf("Unknown event!!\n");		
 			break;
@@ -319,6 +323,11 @@ void PaintView::convolution() {
 	refresh();
 }
 
+void PaintView::dissolve() {
+	isAnEvent = 1;
+	eventToDo = DISSOLVE;
+	refresh();
+}
 
 // Get line from right click
 

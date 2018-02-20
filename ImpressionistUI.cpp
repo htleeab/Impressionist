@@ -290,6 +290,7 @@ void ImpressionistUI::cb_exit(Fl_Menu_* o, void* v)
 	whoami(o)->m_mainWindow->hide();
 	whoami(o)->m_brushDialog->hide();
 	whoami(o)->filterDialog->hide();
+	whoami(o)->dissolveDialog->hide();
 }
 
 void ImpressionistUI::cb_blur_filter_button(Fl_Widget* o, void* v)
@@ -373,6 +374,30 @@ void ImpressionistUI::cb_display_edge(Fl_Menu_ * o, void *)
 	pUI->m_origView->refresh();
 }
 
+void ImpressionistUI::cb_dissolveDialogShow(Fl_Menu_ * o, void *)
+{
+	ImpressionistUI* pUI = whoami(o);
+	pUI->dissolveDialog->show();
+	pUI->m_paintView->refresh();
+
+}
+
+void ImpressionistUI::cb_dissolveSlides(Fl_Widget* o, void* v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	pDoc->dissolveFactor = float(((Fl_Slider *)o)->value());
+}
+
+void ImpressionistUI::cb_dissolve(Fl_Widget* o, void* v)
+{
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+	//ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	//pDoc->dissolve();
+	pUI->m_paintView->dissolve();
+	pUI->m_paintView->refresh();
+}
+
+
 //------- UI should keep track of the current for all the controls for answering the query from Doc ---------
 //-------------------------------------------------------------
 // Sets the type of brush to use to the one chosen in the brush 
@@ -400,6 +425,7 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 		pUI->m_BrushLineAngleSlider->deactivate(); 
 		pUI->edgeClippingButton->deactivate();
 	}
+
 	if (type == 7) {
 		pUI->m_FilterBlurButton->activate();
 		pUI->m_FilterSharpenButton->activate();
@@ -410,6 +436,12 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 		pUI->m_FilterSharpenButton->deactivate();
 		pUI->m_FilterCustomizeButton->deactivate();
 	}
+
+	if (type == 6) {
+		pUI->m_BrushLineWidthSlider->activate();
+		pUI->m_BrushLineAngleSlider->activate();
+	}
+
 	if (type == 8) {
 		pUI->m_loadBrushButton->activate();
 	}
@@ -683,7 +715,8 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 	{ "&Display",		0, 0, 0, FL_SUBMENU },
 		{ "&Original Image",	FL_ALT + 'd', (Fl_Callback *)ImpressionistUI::cb_display_original },
 		{ "&Another Image",	FL_ALT + 'd', (Fl_Callback *)ImpressionistUI::cb_display_another },
-		{ "&Edge Image",	FL_ALT + 'd', (Fl_Callback *)ImpressionistUI::cb_display_edge },
+		{ "&Edge Image",	FL_ALT + 'd', (Fl_Callback *)ImpressionistUI::cb_display_edge ,0,FL_MENU_DIVIDER },
+		{ "&Dissolve Another Image",	FL_ALT + 'd', (Fl_Callback *)ImpressionistUI::cb_dissolveDialogShow },
 		{ 0 },
 
 	{ "&Help",		0, 0, 0, FL_SUBMENU },
@@ -866,7 +899,6 @@ ImpressionistUI::ImpressionistUI() {
     m_brushDialog->end();	
 
 	//FilterDialog
-
 	filterDialog = new Fl_Window(350, 350, "Filter Kernel");
 	
 		filterRowInput = new Fl_Int_Input(40, 20, 25, 25, "&X");
@@ -898,7 +930,25 @@ ImpressionistUI::ImpressionistUI() {
 		applyConvolutionButton->user_data((void*)(this));
 		applyConvolutionButton->callback(cb_convolution);
 		applyConvolutionButton->deactivate();
-
 	filterDialog->end();
+
+	dissolveDialog = new Fl_Window(300, 100, "Dissolve"); 
+		dissolveSlider = new Fl_Value_Slider(20, 20, 200, 20, "Alpha");
+		dissolveSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		dissolveSlider->type(FL_HOR_NICE_SLIDER);
+		dissolveSlider->labelfont(FL_COURIER);
+		dissolveSlider->labelsize(12);
+		dissolveSlider->minimum(0);
+		dissolveSlider->maximum(1);
+		dissolveSlider->step(0.01);
+		dissolveSlider->value(0.5);
+		dissolveSlider->align(FL_ALIGN_RIGHT);
+		dissolveSlider->callback(cb_dissolveSlides);
+
+		dissolveButton = new Fl_Button(100, 50, 75, 25, "&Dissolve");
+		dissolveButton->user_data((void*)(this));
+		dissolveButton->callback(cb_dissolve);
+
+	dissolveDialog->end();
 }
 

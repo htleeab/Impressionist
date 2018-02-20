@@ -55,7 +55,8 @@ void ScatterLinesBrush::BrushMove(const Point source, const Point target)
 					findEdgePoint(target, size, angle, len1, len2, pDoc->m_ucEdgeImage);//return len1,len2
 				}
 				else {
-					fl_alert("please load edge image");
+					fl_alert("Cannot find loaded edge image. Generate edge image"); 
+					pDoc->generateEdgeImage();
 				}
 			}
 			SetColor(p_source);

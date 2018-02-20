@@ -33,8 +33,8 @@ public:
 	void autoPaintDetails();
 
 	void autoPaint();
-
 	void convolution();
+	void dissolve();
 
 	ImpressionistDoc *m_pDoc;
 

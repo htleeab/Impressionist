@@ -78,7 +78,9 @@ public:
 	Fl_Button*			applyConvolutionButton;
 	Fl_Check_Button*	normalizeFilterCheckBox;
 	Fl_Button*			m_loadBrushButton;
-
+	Fl_Window*			dissolveDialog;
+	Fl_Slider*			dissolveSlider;
+	Fl_Button*			dissolveButton;
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
 	ImpressionistDoc*	getDocument();
@@ -136,6 +138,9 @@ private:
 	static void cb_display_original(Fl_Menu_* o, void*);
 	static void cb_display_another(Fl_Menu_* o, void*);
 	static void cb_display_edge(Fl_Menu_* o, void*);
+	static void cb_dissolveDialogShow(Fl_Menu_ * o, void *);
+	static void cb_dissolveSlides(Fl_Widget * o, void * v);
+	static void cb_dissolve(Fl_Widget * o, void * v);
 
 	static void	cb_brushChoice(Fl_Widget* o, void* v);
 	static void	cb_brushDirectionChoice(Fl_Widget* o, void* v);
