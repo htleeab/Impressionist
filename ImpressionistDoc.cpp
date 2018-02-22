@@ -508,7 +508,7 @@ int ImpressionistDoc::loadBrushBitmap(char * iname)
 	GLubyte color[3];
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
-			memcpy(color, data + 3 * (j*width + i),3);
+			memcpy(color, data + 3 * (i*width + j),3);
 			brushBitmap[i][j] = ((float)color[0] / 255.0 + (float)color[1] / 255.0 + (float)color[2]/255.0) / 3.0;
 		}
 	}
