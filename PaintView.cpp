@@ -299,7 +299,7 @@ void PaintView::autoPaintDetails()
 	for (std::vector<Point>::iterator it = points_v.begin(); it != points_v.end(); it++) {
 		int size = original_size + rand() % original_size - original_size / 2;
 		m_pDoc->setSize(size);
-		
+		m_pDoc->updateBrushDirection(*it, *it);
 		m_pDoc->m_pCurrentBrush->BrushMove(*it, *it);
 		m_pDoc->m_pCurrentBrush->BrushEnd(*it, *it);
 	}
