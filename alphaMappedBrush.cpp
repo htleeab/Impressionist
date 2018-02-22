@@ -46,7 +46,7 @@ void AlphaMappedBrush::BrushMove(const Point source, const Point target)
 
 	for (int i = -height / 2; i < height / 2; i++) {
 		for (int j = -width / 2; j < width / 2; j++) {
-			Point p_target(target.x + i, target.y + j);
+			Point p_target(target.x + j, target.y + i);
 			SetColor(source, i + height /2 , j+ width /2); //override setColor
 			glVertex2d(p_target.x, p_target.y);
 		}
