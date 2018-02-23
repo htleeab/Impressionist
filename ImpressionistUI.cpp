@@ -586,98 +586,98 @@ void ImpressionistUI::cb_load_brush_bitmap(Fl_Widget* o, void* v)
 	}
 }
 
-void ImpressionistUI::cb_load_tail_bitmap1(Fl_Widget * o, void * v)
+void ImpressionistUI::cb_load_tile_bitmap1(Fl_Widget * o, void * v)
 {
 	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
 	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
 
 	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
 	if (newfile != NULL) {
-		pDoc->loadTailBitmap(newfile,1, 24);
-		pUI->m_loadTailButton2->activate();
+		pDoc->loadTileBitmap(newfile,1, 24);
+		pUI->m_loadTileButton2->activate();
 	}
 }
 
 
-void ImpressionistUI::cb_load_tail_bitmap2(Fl_Widget * o, void * v)
+void ImpressionistUI::cb_load_tile_bitmap2(Fl_Widget * o, void * v)
 {
 	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
 	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
 
 	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
 	if (newfile != NULL) {
-		pDoc->loadTailBitmap(newfile, 2, 24);
-		pUI->m_loadTailButton3->activate();
+		pDoc->loadTileBitmap(newfile, 2, 24);
+		pUI->m_loadTileButton3->activate();
 	}
 }
 
-void ImpressionistUI::cb_load_tail_bitmap3(Fl_Widget * o, void * v)
+void ImpressionistUI::cb_load_tile_bitmap3(Fl_Widget * o, void * v)
 {
 	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
 	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
 
 	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
 	if (newfile != NULL) {
-		pDoc->loadTailBitmap(newfile, 3, 24);
-		pUI->m_loadTailButton4->activate();
+		pDoc->loadTileBitmap(newfile, 3, 24);
+		pUI->m_loadTileButton4->activate();
 	}
 }
 
-void ImpressionistUI::cb_load_tail_bitmap4(Fl_Widget * o, void * v)
+void ImpressionistUI::cb_load_tile_bitmap4(Fl_Widget * o, void * v)
 {
 	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
 	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
 
 	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
 	if (newfile != NULL) {
-		pDoc->loadTailBitmap(newfile, 4, 24);
-		pUI->m_loadTailButton5->activate();
+		pDoc->loadTileBitmap(newfile, 4, 24);
+		pUI->m_loadTileButton5->activate();
 	}
 }
 
-void ImpressionistUI::cb_load_tail_bitmap5(Fl_Widget * o, void * v)
+void ImpressionistUI::cb_load_tile_bitmap5(Fl_Widget * o, void * v)
 {
 	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
 	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
 
 	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
 	if (newfile != NULL) {
-		pDoc->loadTailBitmap(newfile, 5, 24);
-		pUI->m_loadTailButton6->activate();
+		pDoc->loadTileBitmap(newfile, 5, 24);
+		pUI->m_loadTileButton6->activate();
 	}
 }
 
-void ImpressionistUI::cb_load_tail_bitmap6(Fl_Widget * o, void * v)
+void ImpressionistUI::cb_load_tile_bitmap6(Fl_Widget * o, void * v)
 {
 	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
 	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
 
 	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
 	if (newfile != NULL) {
-		pDoc->loadTailBitmap(newfile, 6, 24);
-		pUI->m_loadTailButton7->activate();
+		pDoc->loadTileBitmap(newfile, 6, 24);
+		pUI->m_loadTileButton7->activate();
 	}
 }
 
-void ImpressionistUI::cb_load_tail_bitmap7(Fl_Widget * o, void * v)
+void ImpressionistUI::cb_load_tile_bitmap7(Fl_Widget * o, void * v)
 {
 	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
 	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
 
 	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
 	if (newfile != NULL) {
-		pDoc->loadTailBitmap(newfile, 7, 24);
-		pUI->m_loadTailButton8->activate();
+		pDoc->loadTileBitmap(newfile, 7, 24);
+		pUI->m_loadTileButton8->activate();
 	}
 }
 
-void ImpressionistUI::cb_load_tail_bitmap8(Fl_Widget * o, void * v)
+void ImpressionistUI::cb_load_tile_bitmap8(Fl_Widget * o, void * v)
 {
 	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
 
 	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
 	if (newfile != NULL) {
-		pDoc->loadTailBitmap(newfile, 8, 24);
+		pDoc->loadTileBitmap(newfile, 8, 24);
 	}
 }
 void ImpressionistUI::cb_draw_mosaic_button(Fl_Widget * o, void * v)
@@ -1062,44 +1062,44 @@ ImpressionistUI::ImpressionistUI() {
 
 	mosaicDialog = new Fl_Window(250, 200, "Mosaic");
 
-		m_loadTailButton1 = new Fl_Button(10, 20, 85, 25, "&Load Tail");
-		m_loadTailButton1->user_data((void*)(this));
-		m_loadTailButton1->callback(cb_load_tail_bitmap1);
+		m_loadTileButton1 = new Fl_Button(10, 20, 85, 25, "&Load Tile");
+		m_loadTileButton1->user_data((void*)(this));
+		m_loadTileButton1->callback(cb_load_tile_bitmap1);
 
-		m_loadTailButton2 = new Fl_Button(110, 20, 85, 25, "&Load Tail");
-		m_loadTailButton2->user_data((void*)(this));
-		m_loadTailButton2->callback(cb_load_tail_bitmap2);
-		m_loadTailButton2->deactivate();
+		m_loadTileButton2 = new Fl_Button(110, 20, 85, 25, "&Load Tile");
+		m_loadTileButton2->user_data((void*)(this));
+		m_loadTileButton2->callback(cb_load_tile_bitmap2);
+		m_loadTileButton2->deactivate();
 
-		m_loadTailButton3 = new Fl_Button(10, 50, 85, 25, "&Load Tail");
-		m_loadTailButton3->user_data((void*)(this));
-		m_loadTailButton3->callback(cb_load_tail_bitmap3);
-		m_loadTailButton3->deactivate();
+		m_loadTileButton3 = new Fl_Button(10, 50, 85, 25, "&Load Tile");
+		m_loadTileButton3->user_data((void*)(this));
+		m_loadTileButton3->callback(cb_load_tile_bitmap3);
+		m_loadTileButton3->deactivate();
 
-		m_loadTailButton4 = new Fl_Button(110, 50, 85, 25, "&Load Tail");
-		m_loadTailButton4->user_data((void*)(this));
-		m_loadTailButton4->callback(cb_load_tail_bitmap4);
-		m_loadTailButton4->deactivate();
+		m_loadTileButton4 = new Fl_Button(110, 50, 85, 25, "&Load Tile");
+		m_loadTileButton4->user_data((void*)(this));
+		m_loadTileButton4->callback(cb_load_tile_bitmap4);
+		m_loadTileButton4->deactivate();
 
-		m_loadTailButton5 = new Fl_Button(10, 80, 85, 25, "&Load Tail");
-		m_loadTailButton5->user_data((void*)(this));
-		m_loadTailButton5->callback(cb_load_tail_bitmap5);
-		m_loadTailButton5->deactivate();
+		m_loadTileButton5 = new Fl_Button(10, 80, 85, 25, "&Load Tile");
+		m_loadTileButton5->user_data((void*)(this));
+		m_loadTileButton5->callback(cb_load_tile_bitmap5);
+		m_loadTileButton5->deactivate();
 
-		m_loadTailButton6 = new Fl_Button(110, 80, 85, 25, "&Load Tail");
-		m_loadTailButton6->user_data((void*)(this));
-		m_loadTailButton6->callback(cb_load_tail_bitmap6);
-		m_loadTailButton6->deactivate();
+		m_loadTileButton6 = new Fl_Button(110, 80, 85, 25, "&Load Tile");
+		m_loadTileButton6->user_data((void*)(this));
+		m_loadTileButton6->callback(cb_load_tile_bitmap6);
+		m_loadTileButton6->deactivate();
 
-		m_loadTailButton7 = new Fl_Button(10, 110, 85, 25, "&Load Tail");
-		m_loadTailButton7->user_data((void*)(this));
-		m_loadTailButton7->callback(cb_load_tail_bitmap7);
-		m_loadTailButton7->deactivate();
+		m_loadTileButton7 = new Fl_Button(10, 110, 85, 25, "&Load Tile");
+		m_loadTileButton7->user_data((void*)(this));
+		m_loadTileButton7->callback(cb_load_tile_bitmap7);
+		m_loadTileButton7->deactivate();
 
-		m_loadTailButton8 = new Fl_Button(110, 110, 85, 25, "&Load Tail");
-		m_loadTailButton8->user_data((void*)(this));
-		m_loadTailButton8->callback(cb_load_tail_bitmap8);
-		m_loadTailButton8->deactivate();
+		m_loadTileButton8 = new Fl_Button(110, 110, 85, 25, "&Load Tile");
+		m_loadTileButton8->user_data((void*)(this));
+		m_loadTileButton8->callback(cb_load_tile_bitmap8);
+		m_loadTileButton8->deactivate();
 
 		m_drawMosaicButton = new Fl_Button(60, 150, 85, 25, "&Draw!");
 		m_drawMosaicButton->user_data((void*)(this));

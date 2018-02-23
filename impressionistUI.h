@@ -83,14 +83,14 @@ public:
 	Fl_Button*			dissolveButton;
 
 	Fl_Window*			mosaicDialog;
-	Fl_Button*			m_loadTailButton1;
-	Fl_Button*			m_loadTailButton2;
-	Fl_Button*			m_loadTailButton3;
-	Fl_Button*			m_loadTailButton4;
-	Fl_Button*			m_loadTailButton5;
-	Fl_Button*			m_loadTailButton6;
-	Fl_Button*			m_loadTailButton7;
-	Fl_Button*			m_loadTailButton8;
+	Fl_Button*			m_loadTileButton1;
+	Fl_Button*			m_loadTileButton2;
+	Fl_Button*			m_loadTileButton3;
+	Fl_Button*			m_loadTileButton4;
+	Fl_Button*			m_loadTileButton5;
+	Fl_Button*			m_loadTileButton6;
+	Fl_Button*			m_loadTileButton7;
+	Fl_Button*			m_loadTileButton8;
 	Fl_Button*			m_drawMosaicButton;
 
 	// Member functions
@@ -182,14 +182,14 @@ private:
 	static void cb_convolution(Fl_Widget* o, void* v);
 	static void cb_load_brush_bitmap(Fl_Widget* o, void* v);
 
-	static void cb_load_tail_bitmap1(Fl_Widget* o, void* v);
-	static void cb_load_tail_bitmap2(Fl_Widget* o, void* v);
-	static void cb_load_tail_bitmap3(Fl_Widget* o, void* v);
-	static void cb_load_tail_bitmap4(Fl_Widget* o, void* v);
-	static void cb_load_tail_bitmap5(Fl_Widget* o, void* v);
-	static void cb_load_tail_bitmap6(Fl_Widget* o, void* v);
-	static void cb_load_tail_bitmap7(Fl_Widget* o, void* v);
-	static void cb_load_tail_bitmap8(Fl_Widget* o, void* v);
+	static void cb_load_tile_bitmap1(Fl_Widget* o, void* v);
+	static void cb_load_tile_bitmap2(Fl_Widget* o, void* v);
+	static void cb_load_tile_bitmap3(Fl_Widget* o, void* v);
+	static void cb_load_tile_bitmap4(Fl_Widget* o, void* v);
+	static void cb_load_tile_bitmap5(Fl_Widget* o, void* v);
+	static void cb_load_tile_bitmap6(Fl_Widget* o, void* v);
+	static void cb_load_tile_bitmap7(Fl_Widget* o, void* v);
+	static void cb_load_tile_bitmap8(Fl_Widget* o, void* v);
 	static void cb_draw_mosaic_button(Fl_Widget * o, void * v);
 
 };

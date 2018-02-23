@@ -42,14 +42,14 @@ ImpressionistDoc::ImpressionistDoc()
 	brushBitmap		= NULL;
 	filterKernel	= NULL;
 
-	m_ucTails = new unsigned char*[8];
+	m_ucTiles = new unsigned char*[8];
 	for (int i = 0; i != 8; i++) {
-		m_ucTails[i] = NULL;
+		m_ucTiles[i] = NULL;
 	}
 
-	tailColors = new GLubyte*[8];
+	tileColors = new GLubyte*[8];
 	for (int i = 0; i != 8; i++) {
-		tailColors[i] = NULL;
+		tileColors[i] = NULL;
 	}
 
 	// create one instance of each brush
@@ -320,8 +320,8 @@ void ImpressionistDoc::dissolve()
 
 void ImpressionistDoc::drawMosaic()
 {
-	if (!m_ucTails[0]) {
-		fl_alert("Tail images are required.");
+	if (!m_ucTiles[0]) {
+		fl_alert("Tile images are required.");
 		return;
 	}
 
@@ -544,7 +544,7 @@ int ImpressionistDoc::loadBrushBitmap(char * iname)
 	return 1;
 }
 
-int ImpressionistDoc::loadTailBitmap(char * iname, int x, int size)
+int ImpressionistDoc::loadTileBitmap(char * iname, int x, int size)
 {
 	// try to open the image to read
 	unsigned char*	data;
@@ -568,11 +568,11 @@ int ImpressionistDoc::loadTailBitmap(char * iname, int x, int size)
 	}
 
 	// release old storage
-	if (m_ucTails[x-1]) {
-		delete[] m_ucTails[x - 1];
+	if (m_ucTiles[x-1]) {
+		delete[] m_ucTiles[x - 1];
 	}
 
-	m_ucTails[x - 1] = new unsigned char[size*size * 3];
+	m_ucTiles[x - 1] = new unsigned char[size*size * 3];
 	int width_scale = width / size;
 	int height_scale = height / size;
 
@@ -589,19 +589,19 @@ int ImpressionistDoc::loadTailBitmap(char * iname, int x, int size)
 			GLubyte* avgColor;
 
 			avgColor = mm.findRegionAverageColor(up_left, bottom_right, data, width, height);
- 			m_ucTails[x - 1][(j + size*i) * 3] = avgColor[0];
-			m_ucTails[x - 1][(j + size*i) * 3 + 1] = avgColor[1];
-			m_ucTails[x - 1][(j + size*i) * 3 + 2] = avgColor[2];
+ 			m_ucTiles[x - 1][(j + size*i) * 3] = avgColor[0];
+			m_ucTiles[x - 1][(j + size*i) * 3 + 1] = avgColor[1];
+			m_ucTiles[x - 1][(j + size*i) * 3 + 2] = avgColor[2];
 
 			delete [] avgColor;
 
 		}
 	}
-	if (tailColors[x - 1]) delete[] tailColors[x - 1];
+	if (tileColors[x - 1]) delete[] tileColors[x - 1];
 
-	tailColors[x - 1] = MosaicMaker::findTailAverageColor(size, m_ucTails[x - 1]);
+	tileColors[x - 1] = MosaicMaker::findTileAverageColor(size, m_ucTiles[x - 1]);
 
-	//printf("%u,%u,%u", tailColors[x - 1][0], tailColors[x - 1][1], tailColors[x - 1][2]);
+	//printf("%u,%u,%u", tileColors[x - 1][0], tileColors[x - 1][1], tileColors[x - 1][2]);
 
 	return 1;
 }
