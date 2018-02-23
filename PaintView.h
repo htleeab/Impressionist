@@ -35,6 +35,7 @@ public:
 	void autoPaint();
 	void convolution();
 	void dissolve();
+	void drawMosaic();
 
 	ImpressionistDoc *m_pDoc;
 

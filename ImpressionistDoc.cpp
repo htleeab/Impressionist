@@ -23,6 +23,7 @@
 #include "FilterBrush.h"
 #include "AlphaMappedBrush.h"
 #include <math.h>
+#include "MosaicMaker.h"
 
 
 #define DESTROY(p)	{  if ((p)!=NULL) {delete [] p; p=NULL; } }
@@ -40,6 +41,16 @@ ImpressionistDoc::ImpressionistDoc()
 	m_ucUndoBuffer	= NULL;
 	brushBitmap		= NULL;
 	filterKernel	= NULL;
+
+	m_ucTails = new unsigned char*[8];
+	for (int i = 0; i != 8; i++) {
+		m_ucTails[i] = NULL;
+	}
+
+	tailColors = new GLubyte*[8];
+	for (int i = 0; i != 8; i++) {
+		tailColors[i] = NULL;
+	}
 
 	// create one instance of each brush
 	ImpBrush::c_nBrushCount	= NUM_BRUSH_TYPE;
@@ -307,6 +318,23 @@ void ImpressionistDoc::dissolve()
 	m_pUI->m_paintView->RestoreContent();
 }
 
+void ImpressionistDoc::drawMosaic()
+{
+	if (!m_ucTails[0]) {
+		fl_alert("Tail images are required.");
+		return;
+	}
+
+	if (!m_ucBitmap) {
+		fl_alert("Please load original image");
+		return;
+	}
+
+	MosaicMaker mm(this);
+	mm.generateMosaic();
+
+}
+
 
 //---------------------------------------------------------
 // Load the specified image
@@ -516,6 +544,68 @@ int ImpressionistDoc::loadBrushBitmap(char * iname)
 	return 1;
 }
 
+int ImpressionistDoc::loadTailBitmap(char * iname, int x, int size)
+{
+	// try to open the image to read
+	unsigned char*	data;
+	int				width,
+		height;
+
+	if (!m_ucBitmap) {
+		fl_alert("please load original image first");
+		return 0;
+	}
+
+	if ((data = readBMP(iname, width, height)) == NULL)
+	{
+		fl_alert("Can't load bitmap file");
+		return 0;
+	}
+
+	if (width < size || height < size) {
+		fl_alert("Should be larger than %d * %d",size, size);
+		return 0;
+	}
+
+	// release old storage
+	if (m_ucTails[x-1]) {
+		delete[] m_ucTails[x - 1];
+	}
+
+	m_ucTails[x - 1] = new unsigned char[size*size * 3];
+	int width_scale = width / size;
+	int height_scale = height / size;
+
+	MosaicMaker mm(this);
+
+
+	for (int i = 0; i != size; i++) {
+		for (int j = 0; j != size; j++) {
+
+			Point up_left(j * width_scale, i * height_scale);
+			Point bottom_right((j + 1) * width_scale, (i + 1) * height_scale);
+
+
+			GLubyte* avgColor;
+
+			avgColor = mm.findRegionAverageColor(up_left, bottom_right, data, width, height);
+ 			m_ucTails[x - 1][(j + size*i) * 3] = avgColor[0];
+			m_ucTails[x - 1][(j + size*i) * 3 + 1] = avgColor[1];
+			m_ucTails[x - 1][(j + size*i) * 3 + 2] = avgColor[2];
+
+			delete [] avgColor;
+
+		}
+	}
+	if (tailColors[x - 1]) delete[] tailColors[x - 1];
+
+	tailColors[x - 1] = MosaicMaker::findTailAverageColor(size, m_ucTails[x - 1]);
+
+	//printf("%u,%u,%u", tailColors[x - 1][0], tailColors[x - 1][1], tailColors[x - 1][2]);
+
+	return 1;
+}
+
 //----------------------------------------------------------------
 // Clear the drawing canvas
 // This is called by the UI when the clear canvas menu item is 
@@ -682,6 +772,23 @@ GLubyte * ImpressionistDoc::GetTargetImagePixel(int x, int y, unsigned char* ima
 		y = m_nHeight - 1;
 
 	return (GLubyte*)(image + 3 * (y*m_nWidth + x));
+}
+
+
+GLubyte * ImpressionistDoc::GetTargetImagePixel(int x, int y, unsigned char* image, int width, int height)
+{
+
+	if (x < 0)
+		x = 0;
+	else if (x >= width)
+		x = width - 1;
+
+	if (y < 0)
+		y = 0;
+	else if (y >= height)
+		y = height - 1;
+
+	return (GLubyte*)(image + 3 * (y*width + x));
 }
 
 unsigned char * ImpressionistDoc::currentDisplay()

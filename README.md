@@ -80,7 +80,7 @@ Here is a list of suggestions for extending the program. You are encouraged to c
 - [ ] [bell][bell] Implement a curved brush that follows the image gradient. See Painterly Styles for Expressive Rendering.
 
 
-- [ ] [bell][bell][bell][bell] Given a source image, construct a new image that is really a mosaic of small (thumbnail) images. To do this, you need to partition the original into tiles and find new thumbnails that are reasonable matches to the tiles. Then draw the new image by substituting the thumbnails for the tiles. See, for example, Adam Finkelsteins Web Gothic. Credit will vary depending on the success of your method.
+- [x] [bell][bell][bell][bell] Given a source image, construct a new image that is really a mosaic of small (thumbnail) images. To do this, you need to partition the original into tiles and find new thumbnails that are reasonable matches to the tiles. Then draw the new image by substituting the thumbnails for the tiles. See, for example, Adam Finkelsteins Web Gothic. Credit will vary depending on the success of your method.
 
 
 - [ ] [bell][bell][bell][bell] Extend the Impressionist program to work with video. The user should be able to load a series of images from a video and set up some initial parameters, and the program should automatically generate an impressionistic version of the video. The video should exhibit temporal coherency. 
