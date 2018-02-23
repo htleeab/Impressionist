@@ -24,6 +24,7 @@
 #define AUTO_PAINT			7
 #define CONVOLUTION			8
 #define DISSOLVE			9
+#define DRAWMOSAIC			10
 
 
 #ifndef WIN32
@@ -146,15 +147,23 @@ void PaintView::draw()
 			break;
 
 		case AUTO_PAINT:
+			m_pDoc->saveUndobuffer();
 			autoPaintDetails();
 			break;
 
 		case CONVOLUTION:
+			m_pDoc->saveUndobuffer();
 			m_pDoc->applyConvolution();
 			break;
 
 		case DISSOLVE:
+			m_pDoc->saveUndobuffer();
 			m_pDoc->dissolve();
+			break;
+
+		case DRAWMOSAIC:
+			m_pDoc->saveUndobuffer();
+			m_pDoc->drawMosaic();
 			break;
 
 		default:
@@ -326,6 +335,13 @@ void PaintView::convolution() {
 void PaintView::dissolve() {
 	isAnEvent = 1;
 	eventToDo = DISSOLVE;
+	refresh();
+}
+
+void PaintView::drawMosaic()
+{
+	isAnEvent = 1;
+	eventToDo = DRAWMOSAIC;
 	refresh();
 }
 

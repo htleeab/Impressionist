@@ -82,6 +82,17 @@ public:
 	Fl_Slider*			dissolveSlider;
 	Fl_Button*			dissolveButton;
 
+	Fl_Window*			mosaicDialog;
+	Fl_Button*			m_loadTailButton1;
+	Fl_Button*			m_loadTailButton2;
+	Fl_Button*			m_loadTailButton3;
+	Fl_Button*			m_loadTailButton4;
+	Fl_Button*			m_loadTailButton5;
+	Fl_Button*			m_loadTailButton6;
+	Fl_Button*			m_loadTailButton7;
+	Fl_Button*			m_loadTailButton8;
+	Fl_Button*			m_drawMosaicButton;
+
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
 	ImpressionistDoc*	getDocument();
@@ -135,6 +146,8 @@ private:
 	static void cb_load_another_image(Fl_Menu_* o, void*);
 	static void cb_load_edge_image(Fl_Menu_ * o, void *);
 	static void cb_generate_edge_image(Fl_Menu_ * o, void *);
+	static void cb_generate_mosaic_image(Fl_Menu_ * o, void *);
+
 
 	static void cb_display_original(Fl_Menu_* o, void*);
 	static void cb_display_another(Fl_Menu_* o, void*);
@@ -168,6 +181,17 @@ private:
 	static void cb_apply_filter(Fl_Widget* o, void* v);
 	static void cb_convolution(Fl_Widget* o, void* v);
 	static void cb_load_brush_bitmap(Fl_Widget* o, void* v);
+
+	static void cb_load_tail_bitmap1(Fl_Widget* o, void* v);
+	static void cb_load_tail_bitmap2(Fl_Widget* o, void* v);
+	static void cb_load_tail_bitmap3(Fl_Widget* o, void* v);
+	static void cb_load_tail_bitmap4(Fl_Widget* o, void* v);
+	static void cb_load_tail_bitmap5(Fl_Widget* o, void* v);
+	static void cb_load_tail_bitmap6(Fl_Widget* o, void* v);
+	static void cb_load_tail_bitmap7(Fl_Widget* o, void* v);
+	static void cb_load_tail_bitmap8(Fl_Widget* o, void* v);
+	static void cb_draw_mosaic_button(Fl_Widget * o, void * v);
+
 };
 
 #endif

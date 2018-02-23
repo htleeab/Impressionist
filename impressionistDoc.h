@@ -26,6 +26,7 @@ public:
 	int		loadAnotherImage(char *iname);
 	int		loadEdgeImage(char* iname);
 	int		loadBrushBitmap(char * iname);
+	int		loadTailBitmap(char *iname, int i, int size = 24);
 
 	int     clearCanvas();                  // called by the UI to clear the drawing canvas
 	void	setBrushType(int type);			// called by the UI to set the brushType
@@ -57,6 +58,7 @@ public:
 	void	sharpeningKernel();
 	void	applyKernel(int row, int col, int** filter, bool normalize = TRUE);
 	void	dissolve();
+	void	drawMosaic();
 	
 
 // Attributes
@@ -76,6 +78,9 @@ public:
 	unsigned int	displayMode;
 
 	unsigned char*	m_ucUndoBuffer;
+
+	unsigned char**	m_ucTails;
+	GLubyte** tailColors;
 
 	// The current active brush.
 	ImpBrush*			m_pCurrentBrush;	
@@ -112,8 +117,8 @@ public:
 	// Get the color of the edge picture at the specified point
 	GLubyte* GetEdgeImagePixel(int x, int y);
 	GLubyte * GetTargetImagePixel(int x, int y, unsigned char * image);
+	GLubyte * GetTargetImagePixel(int x, int y, unsigned char * image, int width, int height);
 	unsigned char*	currentDisplay();
-
 
 private:
 	char			m_imageName[256];

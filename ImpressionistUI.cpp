@@ -346,6 +346,12 @@ void ImpressionistUI::cb_generate_edge_image(Fl_Menu_ * o, void *)
 	pDoc->generateEdgeImage();
 }
 
+void ImpressionistUI::cb_generate_mosaic_image(Fl_Menu_ * o, void *)
+{
+	ImpressionistUI* pUI = whoami(o);
+	pUI->mosaicDialog->show();
+}
+
 void ImpressionistUI::cb_display_original(Fl_Menu_ * o, void *)
 {
 	ImpressionistUI* pUI = whoami(o);
@@ -580,6 +586,108 @@ void ImpressionistUI::cb_load_brush_bitmap(Fl_Widget* o, void* v)
 	}
 }
 
+void ImpressionistUI::cb_load_tail_bitmap1(Fl_Widget * o, void * v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+
+	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
+	if (newfile != NULL) {
+		pDoc->loadTailBitmap(newfile,1, 24);
+		pUI->m_loadTailButton2->activate();
+	}
+}
+
+
+void ImpressionistUI::cb_load_tail_bitmap2(Fl_Widget * o, void * v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+
+	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
+	if (newfile != NULL) {
+		pDoc->loadTailBitmap(newfile, 2, 24);
+		pUI->m_loadTailButton3->activate();
+	}
+}
+
+void ImpressionistUI::cb_load_tail_bitmap3(Fl_Widget * o, void * v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+
+	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
+	if (newfile != NULL) {
+		pDoc->loadTailBitmap(newfile, 3, 24);
+		pUI->m_loadTailButton4->activate();
+	}
+}
+
+void ImpressionistUI::cb_load_tail_bitmap4(Fl_Widget * o, void * v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+
+	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
+	if (newfile != NULL) {
+		pDoc->loadTailBitmap(newfile, 4, 24);
+		pUI->m_loadTailButton5->activate();
+	}
+}
+
+void ImpressionistUI::cb_load_tail_bitmap5(Fl_Widget * o, void * v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+
+	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
+	if (newfile != NULL) {
+		pDoc->loadTailBitmap(newfile, 5, 24);
+		pUI->m_loadTailButton6->activate();
+	}
+}
+
+void ImpressionistUI::cb_load_tail_bitmap6(Fl_Widget * o, void * v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+
+	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
+	if (newfile != NULL) {
+		pDoc->loadTailBitmap(newfile, 6, 24);
+		pUI->m_loadTailButton7->activate();
+	}
+}
+
+void ImpressionistUI::cb_load_tail_bitmap7(Fl_Widget * o, void * v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+
+	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
+	if (newfile != NULL) {
+		pDoc->loadTailBitmap(newfile, 7, 24);
+		pUI->m_loadTailButton8->activate();
+	}
+}
+
+void ImpressionistUI::cb_load_tail_bitmap8(Fl_Widget * o, void * v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+
+	char* newfile = fl_file_chooser("Open 24 bit depth bmp file for Mosaic", "*.bmp", pDoc->getImageName());
+	if (newfile != NULL) {
+		pDoc->loadTailBitmap(newfile, 8, 24);
+	}
+}
+void ImpressionistUI::cb_draw_mosaic_button(Fl_Widget * o, void * v)
+{
+	ImpressionistUI* pUI = (ImpressionistUI*)(o->user_data());
+	//ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	//pDoc->dissolve();
+	pUI->m_paintView->drawMosaic();
+	pUI->m_paintView->refresh();
+}
 //---------------------------------- per instance functions --------------------------------------
 
 //------------------------------------------------
@@ -708,7 +816,8 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
 		{ "&Load Another Image", FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_load_another_image },
 		{ "&Load Edge Image", FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_load_edge_image },
-		{ "&Generate Edge Image", FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_generate_edge_image, 0, FL_MENU_DIVIDER },
+		{ "&Generate Edge Image", FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_generate_edge_image },
+		{ "&Generate Mosaic Image", FL_ALT + 'i', (Fl_Callback *)ImpressionistUI::cb_generate_mosaic_image, 0, FL_MENU_DIVIDER },
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
 		{ 0 },
 	
@@ -950,5 +1059,53 @@ ImpressionistUI::ImpressionistUI() {
 		dissolveButton->callback(cb_dissolve);
 
 	dissolveDialog->end();
+
+	mosaicDialog = new Fl_Window(250, 200, "Mosaic");
+
+		m_loadTailButton1 = new Fl_Button(10, 20, 85, 25, "&Load Tail");
+		m_loadTailButton1->user_data((void*)(this));
+		m_loadTailButton1->callback(cb_load_tail_bitmap1);
+
+		m_loadTailButton2 = new Fl_Button(110, 20, 85, 25, "&Load Tail");
+		m_loadTailButton2->user_data((void*)(this));
+		m_loadTailButton2->callback(cb_load_tail_bitmap2);
+		m_loadTailButton2->deactivate();
+
+		m_loadTailButton3 = new Fl_Button(10, 50, 85, 25, "&Load Tail");
+		m_loadTailButton3->user_data((void*)(this));
+		m_loadTailButton3->callback(cb_load_tail_bitmap3);
+		m_loadTailButton3->deactivate();
+
+		m_loadTailButton4 = new Fl_Button(110, 50, 85, 25, "&Load Tail");
+		m_loadTailButton4->user_data((void*)(this));
+		m_loadTailButton4->callback(cb_load_tail_bitmap4);
+		m_loadTailButton4->deactivate();
+
+		m_loadTailButton5 = new Fl_Button(10, 80, 85, 25, "&Load Tail");
+		m_loadTailButton5->user_data((void*)(this));
+		m_loadTailButton5->callback(cb_load_tail_bitmap5);
+		m_loadTailButton5->deactivate();
+
+		m_loadTailButton6 = new Fl_Button(110, 80, 85, 25, "&Load Tail");
+		m_loadTailButton6->user_data((void*)(this));
+		m_loadTailButton6->callback(cb_load_tail_bitmap6);
+		m_loadTailButton6->deactivate();
+
+		m_loadTailButton7 = new Fl_Button(10, 110, 85, 25, "&Load Tail");
+		m_loadTailButton7->user_data((void*)(this));
+		m_loadTailButton7->callback(cb_load_tail_bitmap7);
+		m_loadTailButton7->deactivate();
+
+		m_loadTailButton8 = new Fl_Button(110, 110, 85, 25, "&Load Tail");
+		m_loadTailButton8->user_data((void*)(this));
+		m_loadTailButton8->callback(cb_load_tail_bitmap8);
+		m_loadTailButton8->deactivate();
+
+		m_drawMosaicButton = new Fl_Button(60, 150, 85, 25, "&Draw!");
+		m_drawMosaicButton->user_data((void*)(this));
+		m_drawMosaicButton->callback(cb_draw_mosaic_button);
+
+
+	mosaicDialog->end();
 }
 
