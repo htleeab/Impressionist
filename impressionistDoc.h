@@ -26,7 +26,7 @@ public:
 	int		loadAnotherImage(char *iname);
 	int		loadEdgeImage(char* iname);
 	int		loadBrushBitmap(char * iname);
-	int		loadTailBitmap(char *iname, int i, int size = 24);
+	int		loadTileBitmap(char *iname, int i, int size = 24);
 
 	int     clearCanvas();                  // called by the UI to clear the drawing canvas
 	void	setBrushType(int type);			// called by the UI to set the brushType
@@ -79,8 +79,8 @@ public:
 
 	unsigned char*	m_ucUndoBuffer;
 
-	unsigned char**	m_ucTails;
-	GLubyte** tailColors;
+	unsigned char**	m_ucTiles;
+	GLubyte** tileColors;
 
 	// The current active brush.
 	ImpBrush*			m_pCurrentBrush;	
